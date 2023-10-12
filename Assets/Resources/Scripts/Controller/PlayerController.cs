@@ -22,9 +22,6 @@ public class PlayerController : MonoBehaviour
 
     void OnKeyboard()
     {
-        //horizontal = Input.GetAxisRaw("Horizontal");
-        //vertical = Input.GetAxisRaw("Vertical");
-
         if (Input.GetKey(KeyCode.W))
             vertical = 1;
         else if(Input.GetKey(KeyCode.S))
