@@ -39,6 +39,7 @@ namespace Manager
                 s_instance = go.GetComponent<GameManager>();
             }
         }
+
+
     }
 }
-
