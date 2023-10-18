@@ -10,9 +10,9 @@ public class ObjectPoolManager : MonoBehaviour
     int defaultCapacity = 100;
     int maxPoolSize = 150;
 
-    public GameObject paintPrefabs;
+    public GameObject tilePrefabs;
 
-    public IObjectPool<GameObject> PaintPool { get; private set; }
+    public IObjectPool<GameObject> tilePool { get; private set; }
 
 
     private void Awake()
@@ -32,30 +32,29 @@ public class ObjectPoolManager : MonoBehaviour
     void Init()
     {
         //=================< 풀링 선언         >=====================
-        PaintPool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool,
+        tilePool = new ObjectPool<GameObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool,
         OnDestroyPoolObject, true, defaultCapacity, maxPoolSize);
 
 
         //=================< 초기 미리 생성         >=====================
         for (int i = 0; i < defaultCapacity; i++)
         {
-            PaintDraw paint = CreatePooledItem().GetComponent<PaintDraw>();
-            paint.paintPool.Release(paint.gameObject);
+            Tiles tile = CreatePooledItem().GetComponent<Tiles>();
+            tile.tilePool.Release(tile.gameObject);
         }
     }
 
     //=================< 생성         >=====================
     private GameObject CreatePooledItem()
     {
-        GameObject poolGO = Instantiate(paintPrefabs);
-        poolGO.GetComponent<PaintDraw>().paintPool = this.PaintPool;
+        GameObject poolGO = Instantiate(tilePrefabs);
+        poolGO.GetComponent<Tiles>().tilePool = this.tilePool;
         return poolGO;
     }
     // =================< 가져오기         >=====================
     private void OnTakeFromPool(GameObject poolGo)
     {
         poolGo.SetActive(true);
-        poolGo.GetComponent<PaintDraw>().DestroySelf();
     }
 
 

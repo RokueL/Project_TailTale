@@ -3,38 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
-    Vector2 curPos;
-    Vector2 nextPos;
-
-    float moveSpeed = 3f;
-    float horizontal;
-    float vertical;
-
-    float maxPaintGage = 10f;
-    float myPaintGage;
-
-    int interactCount;
-
-    bool isEnter;
-    bool isPaint;
-    bool isDraw;
+    Board board;
+    LineCreate lineCreate;
 
     GameObject myTail;
-    GameObject enterObject;
-    Color enterColor;
-    Color originColor;
 
+    float swipeSpeed = 0.2f;
+
+    int tailvalue;
+    int targetX;
+    int targetY;
+    public int column;
+    public int row;
+
+    public bool isSpacePress;
+
+    Color tailC;
+
+    Vector2 tempPosition;
+
+    #region TRIGGER
     void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "Paint")
         {
-            isEnter = true;
-            interactCount++;
-            enterObject = collision.gameObject;
-            enterColor = enterObject.GetComponent<SpriteRenderer>().color;
+
         }
     }
 
@@ -42,104 +39,203 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Paint")
         {
-            isEnter = false;
-            enterObject = null;
+
+        }
+    }
+    #endregion
+
+    void DrawPaint()
+    {
+        if (isSpacePress)
+        {
+            var boards = board.allTiles[column, row].GetComponent<SpriteRenderer>();
+            boards.color = tailC;
+
+            switch (tailvalue)
+            {
+                case 0:
+                    var a = board.allTiles[column, row].GetComponent<Tiles>();
+                    a.isRed = true;
+                    a.isBlue = false;
+                    a.isYellow = false;
+                    break;
+                case 1:
+                    var b = board.allTiles[column, row].GetComponent<Tiles>();
+                    b.isRed = false;
+                    b.isBlue = true;
+                    b.isYellow = false;
+                    break;
+                case 2:
+                    var c = board.allTiles[column, row].GetComponent<Tiles>();
+                    c.isRed = false;
+                    c.isBlue = false;
+                    c.isYellow = true;
+                    break;
+            }
+            board.objects.GetComponent<Tiles>().typeAct();
+
         }
     }
 
-    void ColorTail()
+
+    void OnKeyboard()
     {
-        var tail = myTail.GetComponent<SpriteRenderer>();
-        if (interactCount > 0)
+        //이동만이에용
+        if (Input.GetKeyDown(KeyCode.W)) 
         {
-            tail.color = enterColor;
-            myPaintGage = maxPaintGage;
-            isPaint = true;
-            isDraw = true;
+            if ( row < board.Height-1)
+            {
+                row++;
+            }
+            if (isSpacePress)
+            {
+                DrawPaint();
+            }
         }
+        else if (Input.GetKeyDown(KeyCode.S)) 
+        {
+            if (row > 0)
+            {
+                row--;
+            }
+            if (isSpacePress)
+            {
+                DrawPaint();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (column < board.Width - 1)
+            {
+                column++;
+            }
+            if (isSpacePress)
+            {
+                DrawPaint();
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (column > 0)
+            {
+                column--;
+            }
+            if (isSpacePress)
+            {
+                DrawPaint();
+            }
+        }
+        //색 변경
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            if(tailvalue == 2)
+            {
+                tailvalue = 0;
+            }
+            else
+            {
+                tailvalue += 1;
+            }
+        }
+        // 페인트 칠
+    }
+
+
+
+    #region UNITYDEFAULT
+
+    private void Awake()
+    {
+        column = 0;
+        row = 0;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        originColor = GetComponent<SpriteRenderer>().color;
+        targetX = (int)transform.position.x;
+        targetY = (int)transform.position.y;
+        board = FindObjectOfType<Board>();
+        lineCreate = FindObjectOfType<LineCreate>();
         myTail = GameObject.Find("Tail");
-        curPos = transform.position;
         GameManager.Inputs.KeyAction -= OnKeyboard;
         GameManager.Inputs.KeyAction += OnKeyboard;
     }
 
-    void OnKeyboard()
+    void Move()
     {
-        // 페인트 줍기
-        if(isEnter && enterObject != null)
+        float x = targetX - transform.position.x;
+        float y = targetY - transform.position.y;
+        if (x < 0)
         {
-            if(Input.GetKeyDown(KeyCode.F)) 
-            {
-                ColorTail();
-                interactCount--;
-            }
+            x = x * -1;
         }
-        //이동만이에용
-        if (Input.GetKey(KeyCode.W))
-            vertical = 1;
-        else if(Input.GetKey(KeyCode.S))
-            vertical = -1;
+        if (y < 0)
+        {
+            y = y * -1;
+        }
+
+        if (x > 0.1f)
+        {
+            tempPosition = new Vector2(targetX, transform.position.y);
+            transform.position = Vector2.Lerp(transform.position, tempPosition, swipeSpeed);
+        }
         else
-            vertical = 0;
-
-        if (Input.GetKey(KeyCode.D))
-            horizontal = 1;
-        else if (Input.GetKey(KeyCode.A))
-            horizontal = -1;
+        {
+            tempPosition = new Vector2(targetX, transform.position.y);
+            transform.position = tempPosition;
+        }
+        if (y > 0.1f)
+        {
+            tempPosition = new Vector2(transform.position.x, targetY);
+            transform.position = Vector2.Lerp(transform.position, tempPosition, swipeSpeed);
+        }
         else
-            horizontal = 0;
-
-        nextPos = new Vector2(horizontal, vertical).normalized * Time.deltaTime ;
-
-        this.transform.position = curPos + nextPos;
-
+        {
+            tempPosition = new Vector2(transform.position.x, targetY);
+            transform.position = tempPosition;
+        }
     }
 
-    IEnumerator drawDelay()
+    void tailColor()
     {
-        isDraw = false;
-        yield return new WaitForSeconds(.3f);
-        isDraw = true;
+        var tail = myTail.GetComponent<SpriteRenderer>();
+        switch (tailvalue)
+        {
+            case 0:
+                tailC = Color.red;
+                tail.color = tailC;
+                break;
+            case 1:
+                tailC = Color.blue;
+                tail.color = tailC;
+                break;
+            case 2:
+                tailC = Color.yellow;
+                tail.color = tailC;
+                break;
+        }
+
     }
 
-
-    // Update is called once per frame
     void Update()
     {
-        curPos = transform.position;
+        targetX = column;
+        targetY = row;
+        Move();
+        tailColor();
 
-        if (isPaint && myPaintGage > 0)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetMouseButton(1))
-            {
-                if (isDraw)
-                {
-                    myPaintGage -= .5f;
-                    Debug.Log(myPaintGage);
-                    var paints = ObjectPoolManager.Instance.PaintPool.Get();
-                    paints.transform.position = this.transform.position;
-
-                    Color alpha = myTail.GetComponent<SpriteRenderer>().color;
-                    paints.GetComponent<SpriteRenderer>().color = alpha;
-                    alpha.a = 0.3f;
-                    paints.GetComponent<SpriteRenderer>().color = alpha;
-
-                    StartCoroutine(drawDelay());
-                }
-            }
+            Debug.Log("space down");
+            isSpacePress = true;
+            DrawPaint();
         }
-
-        if(myPaintGage <= 0)
+        else if (Input.GetKeyUp(KeyCode.Space))
         {
-            myTail.GetComponent<SpriteRenderer>().color = originColor;
-            myPaintGage = 0;
-            isPaint = false;
+            Debug.Log("space up");
+            isSpacePress = false;
         }
     }
+    #endregion
 }
