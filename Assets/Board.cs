@@ -7,7 +7,8 @@ public class Board : MonoBehaviour
     public int Width;
     public int Height;
 
-    public GameObject objects;
+    public GameObject battery;
+    public GameObject cannon;
     public GameObject ends;
 
     public GameObject[,] allTiles;
@@ -17,13 +18,21 @@ public class Board : MonoBehaviour
     {
         allTiles = new GameObject[Width, Height];
         SetUp();
-        objects = allTiles[3, 3];
-        objects.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
-        objects.GetComponent<SpriteRenderer>().color = Color.green;
+        battery = allTiles[0, 3];
+        battery.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        battery.GetComponent<SpriteRenderer>().color = Color.green;
+        battery.gameObject.tag = "Battery";
 
-        ends = allTiles[0, 3];
+        ends = allTiles[4, 3];
         ends.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
         ends.GetComponent<SpriteRenderer>().color = Color.black;
+        ends.gameObject.tag = "ScreenDoor";
+
+        cannon = allTiles[3, 0];
+        cannon.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
+        cannon.GetComponent<SpriteRenderer>().color = Color.blue;
+        cannon.gameObject.tag = "Cannon";
+
     }
 
     void SetUp()

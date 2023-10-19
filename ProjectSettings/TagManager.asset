@@ -5,6 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - Paint
+  - Battery
+  - Fire
+  - Water
+  - ScreenDoor
+  - Rock
+  - Block
+  - Hose
+  - Cannon
   layers:
   - Default
   - TransparentFX

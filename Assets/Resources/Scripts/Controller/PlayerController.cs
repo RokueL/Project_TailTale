@@ -20,6 +20,13 @@ public class PlayerController : MonoBehaviour
     public int column;
     public int row;
 
+    int maxRed = 25;
+    int maxBlue = 5;
+    int maxYellow = 5;
+    int myRed;
+    public int myBlue;
+    int myYellow;
+
     public bool isSpacePress;
 
     Color tailC;
@@ -48,32 +55,112 @@ public class PlayerController : MonoBehaviour
     {
         if (isSpacePress)
         {
-            var boards = board.allTiles[column, row].GetComponent<SpriteRenderer>();
-            boards.color = tailC;
-
-            switch (tailvalue)
+            var obj = board.allTiles[column, row].GetComponent<Tiles>();
+            if (obj.objectType == Tiles.ObejctType.None)
             {
-                case 0:
-                    var a = board.allTiles[column, row].GetComponent<Tiles>();
-                    a.isRed = true;
-                    a.isBlue = false;
-                    a.isYellow = false;
-                    break;
-                case 1:
-                    var b = board.allTiles[column, row].GetComponent<Tiles>();
-                    b.isRed = false;
-                    b.isBlue = true;
-                    b.isYellow = false;
-                    break;
-                case 2:
-                    var c = board.allTiles[column, row].GetComponent<Tiles>();
-                    c.isRed = false;
-                    c.isBlue = false;
-                    c.isYellow = true;
-                    break;
-            }
-            board.objects.GetComponent<Tiles>().typeAct();
+                var boards = board.allTiles[column, row].GetComponent<SpriteRenderer>();
+                boards.color = tailC;
+                lineCreate.findBlue = 0;
+                switch (tailvalue)
+                {
+                    case 0:
+                        var a = board.allTiles[column, row].GetComponent<Tiles>();
+                        if (a.isBlue)
+                        {
+                            myBlue++;
+                            myRed--;
+                            lineCreate.isBlueEnd = false;
+                            if (myBlue != 0)
+                            {
+                                if (lineCreate.isCanChange)
+                                {
+                                    lineCreate.BlueBack();
+                                }
+                            }
+                        }
+                        else if (a.isYellow)
+                        {
+                            myYellow++;
+                            myRed--;
+                        }
+                        else if (a.isRed)
+                        {
 
+                        }
+                        else
+                        {
+                            myRed--;
+                        }
+                        a.isRed = true;
+                        a.isBlue = false;
+                        a.isYellow = false;
+                        a.isConnect = false;
+                        break;
+                    case 1:
+                        var b = board.allTiles[column, row].GetComponent<Tiles>();
+                        if (b.isRed)
+                        {
+                            myRed++;
+                            myBlue--;
+                        }
+                        else if (b.isYellow)
+                        {
+                            myYellow++;
+                            myBlue--;
+                        }
+                        else if (b.isBlue)
+                        {
+
+                        }
+                        else
+                        {
+                            myBlue--;
+                        }
+                        b.isRed = false;
+                        b.isBlue = true;
+                        b.isYellow = false;
+                        b.isConnect = false;
+                        break;
+                    case 2:
+                        var c = board.allTiles[column, row].GetComponent<Tiles>();
+                        if (c.isRed)
+                        {
+                            myRed++;
+                            myYellow--;
+                        }
+                        else if (c.isBlue)
+                        {
+                            myBlue++;
+                            lineCreate.isBlueEnd = false;
+                            myYellow--; 
+                            if (myBlue != 0)
+                            {
+                                if (lineCreate.isCanChange)
+                                {
+                                    lineCreate.BlueBack();
+                                }
+                            }
+                        }
+                        else if (c.isYellow)
+                        {
+
+                        }
+                        else
+                        {
+                            myYellow--;
+                        }
+                        c.isRed = false;
+                        c.isBlue = false;
+                        c.isYellow = true;
+                        c.isConnect = false;
+                        break;
+                }
+                lineCreate.isEnd = false;
+                lineCreate.ResetRed();
+                lineCreate.ResetBlue();
+                lineCreate.FindStartTypeAct();
+                lineCreate.disconnect();
+            }
         }
     }
 
@@ -89,7 +176,30 @@ public class PlayerController : MonoBehaviour
             }
             if (isSpacePress)
             {
-                DrawPaint();
+                switch (tailvalue)
+                {
+                    case 0:
+                        if (myRed > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 1:
+                        if (myBlue > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 2:
+                        if (myYellow > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                }
             }
         }
         else if (Input.GetKeyDown(KeyCode.S)) 
@@ -100,7 +210,30 @@ public class PlayerController : MonoBehaviour
             }
             if (isSpacePress)
             {
-                DrawPaint();
+                switch (tailvalue)
+                {
+                    case 0:
+                        if (myRed > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 1:
+                        if (myBlue > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 2:
+                        if (myYellow > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                }
             }
         }
         else if (Input.GetKeyDown(KeyCode.D))
@@ -111,7 +244,30 @@ public class PlayerController : MonoBehaviour
             }
             if (isSpacePress)
             {
-                DrawPaint();
+                switch (tailvalue)
+                {
+                    case 0:
+                        if (myRed > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 1:
+                        if (myBlue > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 2:
+                        if (myYellow > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                }
             }
         }
         else if (Input.GetKeyDown(KeyCode.A))
@@ -122,7 +278,30 @@ public class PlayerController : MonoBehaviour
             }
             if (isSpacePress)
             {
-                DrawPaint();
+                switch (tailvalue)
+                {
+                    case 0:
+                        if (myRed > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 1:
+                        if (myBlue > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                    case 2:
+                        if (myYellow > 0)
+                        {
+                            isSpacePress = true;
+                            DrawPaint();
+                        }
+                        break;
+                }
             }
         }
         //»ö º¯°æ
@@ -148,6 +327,9 @@ public class PlayerController : MonoBehaviour
     {
         column = 0;
         row = 0;
+        myRed = maxRed;
+        myBlue = maxBlue;
+        myYellow = maxYellow;
     }
 
     // Start is called before the first frame update
@@ -227,9 +409,31 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("space down");
-            isSpacePress = true;
-            DrawPaint();
+            switch (tailvalue)
+            {
+                case 0:
+                    if(myRed > 0)
+                    {
+                        isSpacePress = true;
+                        DrawPaint();
+                    }
+                    break;
+                case 1:
+                    if (myBlue > 0)
+                    {
+                        isSpacePress = true;
+                        DrawPaint();
+                    }
+                    break;
+                case 2:
+                    if (myYellow > 0)
+                    {
+                        isSpacePress = true;
+                        DrawPaint();
+                    }
+                    break;
+            }
+
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
