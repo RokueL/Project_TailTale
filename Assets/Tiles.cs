@@ -12,7 +12,8 @@ public class Tiles : MonoBehaviour
         Paint,
         End,
         Wall,
-        Yet
+        Yet,
+        WaterShot
     }
 
     public ObejctType objectType;
@@ -23,6 +24,11 @@ public class Tiles : MonoBehaviour
 
     public bool isConnect;
     public bool isObjectConnect;
+
+    bool isUp;
+    bool isDown;
+    bool isLeft;
+    bool isRight = true;
 
     public int col, row;
 
@@ -99,9 +105,157 @@ public class Tiles : MonoBehaviour
         Debug.Log("DisonnectRed");
     }
 
+    void waterShot()
+    {
+        if (isUp)
+        {
+            for(int i = row + 1; i < board.Height; i++)
+            {
+                waterrow(i);
+            }
+        }
+        else if (isDown)
+        {
+            for (int i = row - 1; i >= 0; i--)
+            {
+                waterrow(i);
+            }
+        }
+        else if(isLeft)
+        {
+            for(int i = col - 1; i >= 0; i--)
+            {
+                watercol(i);
+            }
+        }
+        else if (isRight)
+        {
+            for(int i = col + 1; i < board.Width; i++)
+            {
+                watercol(i);
+            }
+        }
+    }
+
+    void waterrow(int i)
+    {
+        var a = board.allTiles[col, i].GetComponent<Tiles>();
+        if (a.objectType == ObejctType.Object)
+        {
+            if (a.gameObject.tag == "Fire")
+            {
+                a.gameObject.tag = "Untagged";
+                a.objectType = ObejctType.WaterShot;
+                board.allTiles[col, i].GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
+                a.isConnect = false;
+            }
+        }
+        else if (a.objectType == ObejctType.None)
+        {
+            if (a.isRed)
+            {
+                playerController.myRed++;
+            }
+            else if (a.isBlue)
+            {
+                playerController.myBlue++;
+            }
+            else if (a.isYellow)
+            {
+                playerController.myYellow++;
+            }
+            board.allTiles[col, i].GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
+            a.objectType = ObejctType.WaterShot;
+        }
+
+    }
+    void watercol(int i)
+    {
+        var a = board.allTiles[i, row].GetComponent<Tiles>();
+        if (a.objectType == ObejctType.Object)
+        {
+            if (a.gameObject.tag == "Fire")
+            {
+                a.gameObject.tag = "Untagged";
+                a.objectType = ObejctType.WaterShot;
+                board.allTiles[i, row].GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
+                a.isConnect = false;
+            }
+        }
+        else if (a.objectType == ObejctType.None)
+        {
+            if (a.isRed)
+            {
+                playerController.myRed++;
+            }
+            else if (a.isBlue)
+            {
+                playerController.myBlue++;
+            }
+            else if (a.isYellow)
+            {
+                playerController.myYellow++;
+            }
+            board.allTiles[i,row].GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
+            a.objectType = ObejctType.WaterShot;
+        }
+    }
+
+    void waterStop()
+    {
+        if (isUp)
+        {
+            for (int i = row + 1; i < board.Height; i++)
+            {
+                var a = board.allTiles[col, i].GetComponent<Tiles>();
+                if (a.objectType == ObejctType.WaterShot)
+                {
+                    board.allTiles[col, i].GetComponent<SpriteRenderer>().color = Color.white;
+                    a.objectType = ObejctType.None;
+                }
+            }
+        }
+        else if (isDown)
+        {
+            for (int i = row + 1; i < board.Height; i++)
+            {
+                var a = board.allTiles[col, i].GetComponent<Tiles>();
+                if (a.objectType == ObejctType.WaterShot)
+                {
+                    board.allTiles[col, i].GetComponent<SpriteRenderer>().color = Color.white;
+                    a.objectType = ObejctType.None;
+                }
+            }
+        }
+        else if (isLeft)
+        {
+            for (int i = col - 1; i >= 0; i--)
+            {
+                var a = board.allTiles[i, row].GetComponent<Tiles>();
+                if (a.objectType == ObejctType.WaterShot)
+                {
+                    board.allTiles[i, row].GetComponent<SpriteRenderer>().color = Color.white;
+                    a.objectType = ObejctType.None;
+                }
+            }
+        }
+        else if (isRight)
+        {
+            for (int i = col + 1; i < board.Width; i++)
+            {
+                var a = board.allTiles[i, row].GetComponent<Tiles>();
+                if (a.objectType == ObejctType.WaterShot)
+                {
+                    board.allTiles[i, row].GetComponent<SpriteRenderer>().color = Color.white;
+                    a.objectType = ObejctType.None;
+                }
+            }
+        }
+    }
+
     void ObejctCheck()
     {
-        if(this.gameObject.tag == "Battery")
+        if (this.gameObject.tag == "Battery")
         {
             lineCreate.PaintCheck(col, row, 0, 0);
 
@@ -109,21 +263,19 @@ public class Tiles : MonoBehaviour
             lineCreate.PaintCheck(col, row, 0, 1);
             lineCreate.PaintCheck(col, row, 0, 2);
         }
-        else if(this.gameObject.tag == "Water")
+        else if (this.gameObject.tag == "Water")
         {
             lineCreate.PaintCheck(col, row, 1, 0);
             lineCreate.PaintCheck(col, row, 1, 1);
             lineCreate.PaintCheck(col, row, 1, 2);
         }
-        else if(this.gameObject.tag == "Fire")
+        else if (this.gameObject.tag == "Fire")
         {
             lineCreate.PaintCheck(col, row, 2, 0);
             lineCreate.PaintCheck(col, row, 2, 1);
             lineCreate.PaintCheck(col, row, 2, 2);
         }
     }
-
-
 
     public void typeAct()
     {
@@ -137,12 +289,26 @@ public class Tiles : MonoBehaviour
             case ObejctType.End:
                 if (isConnect)
                 {
-                    LightOn();
+                    if (gameObject.tag == "Hose")
+                    {
+                        waterShot();
+                    }
+                    else if (gameObject.tag == "ScreenDoor")
+                    {
+                        LightOn();
+                    }
                     break;
                 }
                 else if (!isConnect)
                 {
-                    LightOff(); 
+                    if (gameObject.tag == "Hose")
+                    {
+                        waterStop();
+                    }
+                    else if (gameObject.tag == "ScreenDoor")
+                    {
+                        LightOff();
+                    }
                     break;
                 }
                 break;

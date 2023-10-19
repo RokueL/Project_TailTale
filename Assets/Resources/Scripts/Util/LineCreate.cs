@@ -222,6 +222,10 @@ public class LineCreate : MonoBehaviour
         disconnect();
     }
 
+    void YellowRotation()
+    {
+
+    }
 
     public void FindStartTypeAct()
     {
@@ -231,7 +235,14 @@ public class LineCreate : MonoBehaviour
             {
                 if (board.allTiles[i, j].GetComponent<Tiles>().objectType == Tiles.ObejctType.Object)
                 {
-                    board.allTiles[i, j].GetComponent<Tiles>().typeAct();
+                    if (board.allTiles[i, j].gameObject.tag == "Cannon" || board.allTiles[i, j].gameObject.tag == "Hose")
+                    {
+
+                    }
+                    else
+                    {
+                        board.allTiles[i, j].GetComponent<Tiles>().typeAct();
+                    }
                 }
             }
         }

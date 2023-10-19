@@ -23,9 +23,9 @@ public class PlayerController : MonoBehaviour
     int maxRed = 25;
     int maxBlue = 5;
     int maxYellow = 5;
-    int myRed;
+    public int myRed;
     public int myBlue;
-    int myYellow;
+    public int myYellow;
 
     public bool isSpacePress;
 
@@ -172,7 +172,19 @@ public class PlayerController : MonoBehaviour
         {
             if ( row < board.Height-1)
             {
-                row++;
+                var a = board.allTiles[column, row + 1].GetComponent<Tiles>().objectType;
+                if (a == Tiles.ObejctType.None)
+                {
+
+                    row++;
+                }
+                else if( a== Tiles.ObejctType.Object)
+                {
+                    if(board.allTiles[column, row + 1].gameObject.tag == "Water")
+                    {
+                        row++;
+                    }
+                }
             }
             if (isSpacePress)
             {
@@ -206,7 +218,18 @@ public class PlayerController : MonoBehaviour
         {
             if (row > 0)
             {
-                row--;
+                var a = board.allTiles[column, row - 1].GetComponent<Tiles>().objectType;
+                if (a == Tiles.ObejctType.None)
+                {
+                    row--;
+                }
+                else if (a == Tiles.ObejctType.Object)
+                {
+                    if (board.allTiles[column, row - 1].gameObject.tag == "Water")
+                    {
+                        row++;
+                    }
+                }
             }
             if (isSpacePress)
             {
@@ -240,7 +263,18 @@ public class PlayerController : MonoBehaviour
         {
             if (column < board.Width - 1)
             {
-                column++;
+                var a = board.allTiles[column + 1, row].GetComponent<Tiles>().objectType;
+                if (a == Tiles.ObejctType.None)
+                {
+                    column++;
+                }
+                else if (a == Tiles.ObejctType.Object)
+                {
+                    if (board.allTiles[column + 1, row].gameObject.tag == "Water")
+                    {
+                        row++;
+                    }
+                }
             }
             if (isSpacePress)
             {
@@ -274,7 +308,18 @@ public class PlayerController : MonoBehaviour
         {
             if (column > 0)
             {
-                column--;
+                var a = board.allTiles[column - 1, row].GetComponent<Tiles>().objectType;
+                if (a == Tiles.ObejctType.None)
+                {
+                    column--;
+                }
+                else if (a == Tiles.ObejctType.Object)
+                {
+                    if (board.allTiles[column -1, row].gameObject.tag == "Water")
+                    {
+                        row++;
+                    }
+                }
             }
             if (isSpacePress)
             {

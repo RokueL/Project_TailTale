@@ -600,9 +600,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fc5e8a06d232bc4f8894fe8237b9f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 5
-  Height: 5
-  objects: {fileID: 0}
+  Width: 10
+  Height: 10
+  battery: {fileID: 0}
+  cannon: {fileID: 0}
+  fire: {fileID: 0}
   ends: {fileID: 0}
 --- !u!4 &1496067226
 Transform:
@@ -690,7 +692,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6068f92ae95d4e4f9c9ef8c66e0cdaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  oriCol: 0
+  oriRow: 0
+  findBlue: 0
+  isCanChange: 0
   isEnd: 0
+  isBlueEnd: 0
 --- !u!1001 &8286008891894722474
 PrefabInstance:
   m_ObjectHideFlags: 0
