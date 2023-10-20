@@ -24,6 +24,7 @@ public class Tiles : MonoBehaviour
 
     public bool isConnect;
     public bool isMoved;
+    public bool isCanMove;
 
     public bool isUp;
     public bool isDown;
@@ -50,6 +51,14 @@ public class Tiles : MonoBehaviour
         if(objectType == ObejctType.Object)
         {
             isConnect = true;
+            isCanMove = true;
+        }
+        if(objectType == ObejctType.End)
+        {
+            if(gameObject.tag == "Cannon" || gameObject.tag == "Hose")
+            {
+                isCanMove = true;
+            }
         }
 
     }

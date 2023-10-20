@@ -10,7 +10,7 @@ public class RedCheck : MonoBehaviour
     int redcount;
     bool isRedEnd;
 
-    public void ResetRed()
+    void ResetRed()
     {
         for (int i = 0; i < redList.Length; i++)
         {
@@ -41,6 +41,7 @@ public class RedCheck : MonoBehaviour
 
     public void RedCheckStart(int col, int row, int typeValue) 
     {
+        Debug.Log("Red Start");
         ResetRed();
         RedChecking(col, row, typeValue);
     }
@@ -56,7 +57,7 @@ public class RedCheck : MonoBehaviour
         {
             RedUp(col, row, typeValue);
         }
-        else if (row < board.Height - 1)
+        else if (row == board.Height - 1)
         {
             RedDown(col, row, typeValue);
         }
@@ -84,7 +85,7 @@ public class RedCheck : MonoBehaviour
     void RedUp(int col, int row, int typeValue)
     {
         var a = board.allTiles[col, row + 1].GetComponent<Tiles>();
-        if (a.isBlue)
+        if (a.isRed)
         {
             if (!a.isConnect)
             {
@@ -102,7 +103,7 @@ public class RedCheck : MonoBehaviour
     void RedDown(int col, int row, int typeValue)
     {
         var a = board.allTiles[col, row - 1].GetComponent<Tiles>();
-        if (a.isBlue)
+        if (a.isRed)
         {
             if (!a.isConnect)
             {
@@ -120,7 +121,8 @@ public class RedCheck : MonoBehaviour
     void RedRight(int col, int row, int typeValue)
     {
         var a = board.allTiles[col + 1, row].GetComponent<Tiles>();
-        if (a.isBlue)
+
+        if (a.isRed)
         {
             if (!a.isConnect)
             {
@@ -138,7 +140,7 @@ public class RedCheck : MonoBehaviour
     void RedLeft(int col, int row, int typeValue)
     {
         var a = board.allTiles[col - 1, row].GetComponent<Tiles>();
-        if (a.isBlue)
+        if (a.isRed)
         {
             if (!a.isConnect)
             {
@@ -190,7 +192,7 @@ public class RedCheck : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        board = GetComponent<Board>();
+        board = FindObjectOfType<Board>();
     }
 
     // Update is called once per frame

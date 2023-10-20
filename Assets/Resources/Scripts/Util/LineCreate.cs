@@ -456,7 +456,7 @@ public class LineCreate : MonoBehaviour
                     RedEndCheck(typeValue, up);
                     break;
                 case 1:
-                    if (ups.isBlue)
+                    if (ups.isBlue )
                     {
                         if (ups.isConnect == false)
                         {

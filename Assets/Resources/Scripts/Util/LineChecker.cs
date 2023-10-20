@@ -10,8 +10,24 @@ public class LineChecker : MonoBehaviour
     Board board;
     PlayerController playerController;
 
-    public void FindObject() 
+    // Start is called before the first frame update
+    void Start()
     {
+        redCheck = FindObjectOfType<RedCheck>();
+        blueCheck = FindObjectOfType<BlueCheck>();
+
+        board = FindObjectOfType<Board>();
+        playerController = FindObjectOfType<PlayerController>();
+    }
+
+    public void FindObject()
+    {
+        StartCoroutine(findObject());
+    }
+
+    IEnumerator findObject() 
+    {
+        yield return new WaitForSeconds(.1f);
         for(int i = 0; i < board.Width; i++)
         {
             for (int j = 0; j < board.Height; j++)
@@ -21,60 +37,51 @@ public class LineChecker : MonoBehaviour
                 {
                     if (a.gameObject.tag == "Battery")
                     {
-                        redCheck.RedCheckStart(i, j, 0);
                         if (playerController.myBlue == 0)
                         {
-                            blueCheck.BlueCheckStart(i, j, 0);
+                            blueCheck.BlueCheckStart(i, j, 0, i, j);
                         }
+                        redCheck.RedCheckStart(i, j, 0);
                     }
                     else if (a.gameObject.tag == "Fire")
                     {
-                        redCheck.RedCheckStart(i, j, 1);
                         if (playerController.myBlue == 0)
                         {
-                            blueCheck.BlueCheckStart(i, j, 1);
+                            blueCheck.BlueCheckStart(i, j, 1, i, j);
                         }
+                        redCheck.RedCheckStart(i, j, 1);
                     }
                     else if (a.gameObject.tag == "Water")
                     {
-                        redCheck.RedCheckStart(i, j, 2);
                         if (playerController.myBlue == 0)
                         {
-                            blueCheck.BlueCheckStart(i, j, 2);
+                            blueCheck.BlueCheckStart(i, j, 2, i, j);
                         }
+                        redCheck.RedCheckStart(i, j, 2);
                     }
                 }
 
 
-                if(a.objectType == Tiles.ObejctType.End) // 캐논 2 호스 3
+                if(a.objectType == Tiles.ObejctType.End) // 캐논 3 호스 4
                 {
                     if (a.gameObject.tag == "Cannon")
                     {
                         if (playerController.myBlue == 0)
                         {
-                            blueCheck.BlueCheckStart(i, j, 3);
+                            Debug.Log("Cannon Start");
+                            blueCheck.BlueCheckStart(i, j, 3, i, j);
                         }
                     }
                     if (a.gameObject.tag == "Hose")
                     {
                         if (playerController.myBlue == 0)
                         {
-                            blueCheck.BlueCheckStart(i, j, 4);
+                            blueCheck.BlueCheckStart(i, j, 4, i, j);
                         }
                     }
                 }
             }
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        redCheck = FindObjectOfType<RedCheck>();
-        blueCheck = FindObjectOfType<BlueCheck>();
-
-        board = FindObjectOfType<Board>();
-        playerController = FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame

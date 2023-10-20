@@ -8,17 +8,17 @@ public class BlueCheck : MonoBehaviour
     Board board;
 
     int oriCol, oriRow;
+    int c, r;
 
     GameObject[] blueList = new GameObject[25];
     int bluecount;
     bool isBlueEnd;
 
-    public void BlueCheckStart(int col, int row, int typeValue)
+    public void BlueCheckStart(int col, int row, int typeValue, int oriC, int oriR)
     {
         ResetBlue();
-        oriCol = col;
-        oriRow = row;
-        BlueChecking(col, row, typeValue);
+        Debug.Log("Start -> Check");
+        BlueChecking(col, row, typeValue, oriC, oriR);
     }
 
     public void ResetBlue()
@@ -27,42 +27,43 @@ public class BlueCheck : MonoBehaviour
         {
             if (blueList[i] != null)
             {
-                blueList[i].GetComponent<Tiles>().isConnect = false;
+                blueList[i].GetComponent<Tiles>().isCanMove = false;
                 blueList[i] = null;
             }
         }
         bluecount = 0;
     }
 
-    void BlueChecking(int col, int row, int typeValue ) // 내 타입 가져오는 거 (오브젝트에서 호출되는 거니깐 불인지 전기인지 등등
+    void BlueChecking(int col, int row, int typeValue, int oriC, int oriR) // 내 타입 가져오는 거 (오브젝트에서 호출되는 거니깐 불인지 전기인지 등등
     {
         if(row > 0 && row < board.Height-1)
         {
-            BlueUp(col, row, typeValue );
-            BlueDown(col, row, typeValue );
+            BlueUp(col, row, typeValue, oriC, oriR);
+            BlueDown(col, row, typeValue, oriC, oriR);
         }
         else if(row == 0)
         {
-            BlueUp(col,row, typeValue );
+            BlueUp(col, row, typeValue, oriC, oriR);
         }
-        else if(row < board.Height-1)
+        else if(row == board.Height-1)
         {
-            BlueDown(col,row, typeValue );
+            Debug.Log("Check -> Down");
+            BlueDown(col, row, typeValue, oriC, oriR);
         }
 
 
         if (col > 0 && col < board.Width - 1)
         {
-            BlueRight(col, row, typeValue );
-            BlueLeft(col, row, typeValue );
+            BlueRight(col, row, typeValue, oriC, oriR);
+            BlueLeft(col, row, typeValue, oriC, oriR);
         }
         else if(col == 0)
         {
-            BlueRight(col,row, typeValue );
+            BlueRight(col, row, typeValue, oriC, oriR);
         }
         else if(col == board.Width - 1)
         {
-            BlueLeft(col,row, typeValue );
+            BlueLeft(col, row, typeValue, oriC, oriR);
         }
 
         if (bluecount == 5)
@@ -71,32 +72,40 @@ public class BlueCheck : MonoBehaviour
             {
                 Debug.Log("5개 이어짐");
                 isBlueEnd = true;
-                StartCoroutine(BlueChange(col, row, typeValue));
+                StartCoroutine(BlueChange(col, row, typeValue, oriC, oriR));
                 return;
             }
         }
         if( bluecount < 5)
         {
             Debug.Log("아입니더");
-            if (isBlueEnd)
+            if (board.allTiles[oriC, oriR].GetComponent<Tiles>().isMoved)
             {
-                Debug.Log("돌아가욧");
-                isBlueEnd = false;
-                StartCoroutine(BlueChangeBack());
+                if (isBlueEnd)
+                {
+                    Debug.Log("돌아가욧");
+                    isBlueEnd = false;
+                    StartCoroutine(BlueChangeBack());
+                }
             }
         }
 
     }
 
-    IEnumerator BlueChange(int col, int row, int typeValue)
+    IEnumerator BlueChange(int col, int row, int typeValue, int oriC, int oriR) // 배터리 0 불 1 물 2 캐논 3 호스 4
     {
         yield return new WaitForSeconds(.1f);
+        Debug.Log("oriCR "+oriC + " , " + oriR);
+        Debug.Log("CR " + col + " , " + row);
+        c = col;
+        r = row;
+
         isBlueEnd = false;
-        var from = board.allTiles[oriCol, oriRow].GetComponent<Tiles>(); //원본
+        var from = board.allTiles[oriC, oriR].GetComponent<Tiles>(); //원본
         var to = board.allTiles[col, row].GetComponent<Tiles>(); //이동할 장소
 
-        to.originCol = oriCol;
-        to.originRow = oriRow;
+        to.originCol = oriC;
+        to.originRow = oriR;
 
         to.gameObject.tag = from.gameObject.tag;
         to.objectType = from.objectType;
@@ -108,11 +117,12 @@ public class BlueCheck : MonoBehaviour
         to.isRight = from.isRight;
         to.isLeft = from.isLeft;
         to.isConnect = true;
-        to.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
+        to.isCanMove = true;
+        to.isMoved = true;
+        TypeImage(typeValue, to);
 
-
-        from.originCol = col;
-        from.originRow = row;
+        from.originCol = c;
+        from.originRow = r;
 
         from.gameObject.tag = "Untagged";
         from.objectType = Tiles.ObejctType.Yet;
@@ -124,9 +134,35 @@ public class BlueCheck : MonoBehaviour
         from.isRight = false;
         from.isLeft = false;
         from.isConnect = true;
+        from.isCanMove = true;
+        to.isMoved = false;
         from.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 
 
+    }
+
+    void TypeImage(int typeValue, Tiles to)
+    {
+        var obj = to.gameObject.GetComponent<SpriteRenderer>();
+        switch(typeValue)
+        {
+            case 0:
+                obj.color = Color.green;
+                break;
+            case 1:
+                obj.color = Color.red;
+                break;
+            case 2:
+                obj.color = new Color(0,255,255);
+                break;
+            case 3:
+                obj.color = Color.black;
+                break;
+            case 4:
+                obj.color = Color.black;
+                break;
+
+        }
     }
 
     public void blueChangeBack()
@@ -156,7 +192,9 @@ public class BlueCheck : MonoBehaviour
                     a.isRight = movedObject.isRight;
                     a.isLeft = movedObject.isLeft;
                     a.isConnect = true;
-                    a.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
+                    a.isCanMove = true;
+                    a.isMoved = false;
+                    a.gameObject.GetComponent<SpriteRenderer>().color = movedObject.GetComponent<SpriteRenderer>().color;
 
                     movedObject.originCol = movedObject.col;
                     movedObject.originRow = movedObject.row;
@@ -171,6 +209,8 @@ public class BlueCheck : MonoBehaviour
                     movedObject.isRight = false;
                     movedObject.isLeft = false;
                     movedObject.isConnect = false;
+                    movedObject.isCanMove = false;
+                    movedObject.isMoved = false;
                     movedObject.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 
                     a.originCol = a.col;
@@ -180,59 +220,60 @@ public class BlueCheck : MonoBehaviour
         }
     }
     #region DIRECTION
-    void BlueUp(int col, int row, int typeValue)
+    void BlueUp(int col, int row, int typeValue, int oriC, int oriR)
     {
         var a = board.allTiles[col, row + 1].GetComponent<Tiles>();
         if (a.isBlue)
         {
-            if (!a.isConnect)
+            if (!a.isCanMove)
             {
                 blueList[bluecount] = a.gameObject;
                 bluecount++;
-                a.isConnect = true;
-                BlueChecking(col, row + 1, typeValue);
+                a.isCanMove = true;
+                BlueChecking(col, row + 1, typeValue, oriC, oriR);
             }
         }
     }
-    void BlueDown(int col, int row, int typeValue)
+    void BlueDown(int col, int row, int typeValue, int oriC, int oriR)
     {
         var a = board.allTiles[col, row - 1].GetComponent<Tiles>();
         if (a.isBlue)
         {
-            if (!a.isConnect)
+            if (!a.isCanMove)
             {
+                Debug.Log("a");
                 blueList[bluecount] = a.gameObject;
                 bluecount++;
-                a.isConnect = true;
-                BlueChecking(col, row - 1, typeValue);
+                a.isCanMove = true;
+                BlueChecking(col, row - 1, typeValue, oriC, oriR);
             }
         }
     }
-    void BlueRight(int col, int row, int typeValue)
+    void BlueRight(int col, int row, int typeValue, int oriC, int oriR)
     {
         var a = board.allTiles[col + 1, row].GetComponent<Tiles>();
         if (a.isBlue)
         {
-            if (!a.isConnect)
+            if (!a.isCanMove)
             {
                 blueList[bluecount] = a.gameObject;
                 bluecount++;
-                a.isConnect = true;
-                BlueChecking(col + 1, row, typeValue);
+                a.isCanMove = true;
+                BlueChecking(col + 1, row, typeValue, oriC, oriR);
             }
         }
     }
-    void BlueLeft(int col, int row, int typeValue)
+    void BlueLeft(int col, int row, int typeValue, int oriC, int oriR)
     {
         var a = board.allTiles[col - 1, row].GetComponent<Tiles>();
         if (a.isBlue)
         {
-            if (!a.isConnect)
+            if (!a.isCanMove)
             {
                 blueList[bluecount] = a.gameObject;
                 bluecount++;
-                a.isConnect = true;
-                BlueChecking(col - 1, row, typeValue);
+                a.isCanMove = true;
+                BlueChecking(col - 1, row, typeValue, oriC, oriR);
             }
         }
     }
