@@ -13,7 +13,7 @@ public class LineCreate : MonoBehaviour
     int origCol, origRow;
 
     int redcount;
-    int bluecount;
+    public int bluecount;
     int yellowcount;
 
     public int findBlue;
@@ -23,10 +23,11 @@ public class LineCreate : MonoBehaviour
     bool isYellow;
     public bool isCanChange;
 
-    public bool isEnd;
+    public bool isRedEnd;
     public bool isBlueEnd;
 
     Board board;
+    YellowCheck yellowCheck;
 
     GameObject bluestack;
 
@@ -42,6 +43,7 @@ public class LineCreate : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<Board>();
+        yellowCheck = FindObjectOfType<YellowCheck>();
     }
 
    public void disconnect()
@@ -196,13 +198,15 @@ public class LineCreate : MonoBehaviour
 
     public void BlueBack()
     {
+        isBlueEnd = false;
+        isCanChange = false;
         for (int i = 0; i < board.Width; i++)
         {
             for (int j = 0; j < board.Height; j++)
             {
                 if (board.allTiles[i, j].GetComponent<Tiles>().objectType == Tiles.ObejctType.Object)
                 {
-                    if (board.allTiles[i, j].gameObject.tag == "Battery")
+                    if (board.allTiles[i, j].gameObject.tag == "Water")
                     {
                         chaCol = i;
                         chaRow = j;
@@ -218,14 +222,10 @@ public class LineCreate : MonoBehaviour
         Debug.Log("ori " + origCol + " , " + origRow);
 
         Debug.Log("cha " + chaCol + " , " + chaRow);
-        board.allTiles[origCol, origRow].GetComponent<Tiles>().backChange(origCol, origRow, chaCol, chaRow);
         disconnect();
     }
 
-    void YellowRotation()
-    {
 
-    }
 
     public void FindStartTypeAct()
     {
@@ -235,13 +235,13 @@ public class LineCreate : MonoBehaviour
             {
                 if (board.allTiles[i, j].GetComponent<Tiles>().objectType == Tiles.ObejctType.Object)
                 {
+                        board.allTiles[i, j].GetComponent<Tiles>().typeAct();
+                }
+                if (board.allTiles[i,j].GetComponent<Tiles>().objectType == Tiles.ObejctType.End)
+                {
                     if (board.allTiles[i, j].gameObject.tag == "Cannon" || board.allTiles[i, j].gameObject.tag == "Hose")
                     {
-
-                    }
-                    else
-                    {
-                        board.allTiles[i, j].GetComponent<Tiles>().typeAct();
+                       // yellowCheck.YellowRotation(i, j);
                     }
                 }
             }
@@ -291,9 +291,10 @@ public class LineCreate : MonoBehaviour
     }
     #endregion
 
+       
     public void PaintCheck(int col, int row, int typeValue, int colorValue) //typeValue 는 Object가 불인지 물인지 전기인지     colorValue는 페인트 색깔로 분류해둔것;
     {
-        Debug.Log(bluecount);
+        Debug.Log("blueCount : " +bluecount);
         if (board.allTiles[col,row].GetComponent<Tiles>().objectType == Tiles.ObejctType.Object)
         {
             oriCol = col;
@@ -333,11 +334,11 @@ public class LineCreate : MonoBehaviour
         }
 
         #endregion
-        if (!isEnd)
+        if (!isRedEnd)
         {
             disconnect();
         }
-        if (bluecount == 5)
+        if (bluecount >= 5)
         {
             isCanChange = true;
             if (!isBlueEnd)
@@ -345,8 +346,19 @@ public class LineCreate : MonoBehaviour
                 BlueEndCheck(col, row);
             }
         }
+        else if(bluecount < 5)
+        {
+            if (isCanChange)
+            {
+                if (isBlueEnd)
+                {
+                    BlueBack();
+                }
+            }
+        }
         else
         {
+            disconnect();
             isCanChange = false;
             findBlue = bluecount;
         }
@@ -357,189 +369,144 @@ public class LineCreate : MonoBehaviour
     {
         GameObject left = board.allTiles[col - 1, row];
         var lefts = left.GetComponent<Tiles>();
-        switch (colorValue)
-        {
-            case 0:
-                if (lefts.isRed)
-                {
-                    if (lefts.isConnect == false)
+
+            switch (colorValue)
+            {
+                case 0:
+                    if (lefts.isRed)
                     {
-                        redlist[redcount] = left;
-                        redcount++;
-                        lefts.isConnect = true;
-                        PaintCheck(col - 1, row, typeValue, colorValue);
+                        if (lefts.isConnect == false)
+                        {
+                            redlist[redcount] = left;
+                            redcount++;
+                            lefts.isConnect = true;
+                            PaintCheck(col - 1, row, typeValue, colorValue);
+                        }
                     }
-                }
-                RedEndCheck(typeValue, left);
-                break;
-            case 1:
-                if (lefts.isBlue)
-                {
-                    if (lefts.isConnect == false)
+                    RedEndCheck(typeValue, left);
+                    break;
+                case 1:
+                    if (lefts.isBlue)
                     {
-                        bluelist[bluecount] = left;
-                        bluecount++;
-                        lefts.isConnect = true;
-                        PaintCheck(col - 1, row, typeValue, colorValue);
+                        if (lefts.isConnect == false)
+                        {
+                            bluelist[bluecount] = left;
+                            bluecount++;
+                            lefts.isConnect = true;
+                            PaintCheck(col - 1, row, typeValue, colorValue);
+                        }
                     }
-                }
-                break;
-            case 2:
-                if (lefts.isYellow)
-                {
-                    if (lefts.isConnect == false)
-                    {
-                        yellowlist[yellowcount] = left;
-                        yellowcount++;
-                        lefts.isConnect = true;
-                        PaintCheck(col - 1, row, typeValue, colorValue);
-                    }
-                }
-                YellowEndCheck();
-                break;
-        }
+                    break;
+            }
+        
     }
 
     void PaintRight(int col, int row, int typeValue, int colorValue)
     {
         GameObject right = board.allTiles[col + 1, row];
         var rights = right.GetComponent<Tiles>();
-        switch (colorValue)
-        {
-            case 0:
-                if (rights.isRed)
-                {
-                    if (rights.isConnect == false)
+            switch (colorValue)
+            {
+                case 0:
+                    if (rights.isRed)
                     {
-                        redlist[redcount] = right;
-                        redcount++;
-                        rights.isConnect = true;
-                        PaintCheck(col + 1, row, typeValue, colorValue);
+                        if (rights.isConnect == false)
+                        {
+                            redlist[redcount] = right;
+                            redcount++;
+                            rights.isConnect = true;
+                            PaintCheck(col + 1, row, typeValue, colorValue);
+                        }
                     }
-                }
-                RedEndCheck(typeValue, right);
-                break;
-            case 1:
-                if (rights.isBlue)
-                {
-                    if (rights.isConnect == false)
+                    RedEndCheck(typeValue, right);
+                    break;
+                case 1:
+                    if (rights.isBlue)
                     {
-                        bluelist[bluecount] = right;
-                        bluecount++;
-                        rights.isConnect = true;
-                        PaintCheck(col + 1, row, typeValue, colorValue);
+                        if (rights.isConnect == false)
+                        {
+                            bluelist[bluecount] = right;
+                            bluecount++;
+                            rights.isConnect = true;
+                            PaintCheck(col + 1, row, typeValue, colorValue);
+                        }
                     }
-                }
-                break;
-            case 2:
-                if (rights.isYellow)
-                {
-                    if (rights.isConnect == false)
-                    {
-                        yellowlist[yellowcount] = right;
-                        yellowcount++;
-                        rights.isConnect = true;
-                        PaintCheck(col + 1, row, typeValue, colorValue);
-                    }
-                }
-                YellowEndCheck();
-                break;
-        }
+                    break;
+            }
+        
     }
 
     void PaintUP(int col, int row, int typeValue, int colorValue)
     {
         GameObject up = board.allTiles[col, row + 1];
         var ups = up.GetComponent<Tiles>();
-        switch (colorValue)
-        {
-            case 0:
-                if (ups.isRed)
-                {
-                    if (ups.isConnect == false)
+            switch (colorValue)
+            {
+                case 0:
+                    if (ups.isRed)
                     {
-                        redlist[redcount] = up;
-                        redcount++;
-                        ups.isConnect = true;
-                        PaintCheck(col, row + 1, typeValue, colorValue);
+                        if (ups.isConnect == false)
+                        {
+                            redlist[redcount] = up;
+                            redcount++;
+                            ups.isConnect = true;
+                            PaintCheck(col, row + 1, typeValue, colorValue);
+                        }
                     }
-                }
-                RedEndCheck(typeValue, up);
-                break;
-            case 1:
-                if (ups.isBlue)
-                {
-                    if (ups.isConnect == false)
+                    RedEndCheck(typeValue, up);
+                    break;
+                case 1:
+                    if (ups.isBlue)
                     {
-                        bluelist[bluecount] = up;
-                        bluecount++;
-                        ups.isConnect = true;
-                        PaintCheck(col, row + 1, typeValue, colorValue);
+                        if (ups.isConnect == false)
+                        {
+                            bluelist[bluecount] = up;
+                            bluecount++;
+                            ups.isConnect = true;
+                            PaintCheck(col, row + 1, typeValue, colorValue);
+                        }
                     }
-                }
 
-                break;
-            case 2:
-                if (ups.isYellow)
-                {
-                    if (ups.isConnect == false)
-                    {
-                        yellowlist[yellowcount] = up;
-                        yellowcount++;
-                        ups.isConnect = true;
-                        PaintCheck(col + 1, row, typeValue, colorValue);
-                    }
-                }
-                YellowEndCheck();
-                break;
-        }
+                    break;
+            }
+        
     }
 
     void PaintDown(int col, int row, int typeValue, int colorValue)
     {
         GameObject down = board.allTiles[col, row - 1];
         var downs = down.GetComponent<Tiles>();
-        switch (colorValue)
-        {
-            case 0:
-                if (downs.isRed)
-                {
-                    if (downs.isConnect == false)
+
+            switch (colorValue)
+            {
+                case 0:
+                    if (downs.isRed)
                     {
-                        redlist[redcount] = down;
-                        redcount++;
-                        downs.isConnect = true;
-                        PaintCheck(col, row - 1, typeValue, colorValue);
+                        if (downs.isConnect == false)
+                        {
+                            redlist[redcount] = down;
+                            redcount++;
+                            downs.isConnect = true;
+                            PaintCheck(col, row - 1, typeValue, colorValue);
+                        }
                     }
-                }
-                RedEndCheck(typeValue, down);
-                break;
-            case 1:
-                if (downs.isBlue)
-                {
-                    if (downs.isConnect == false)
+                    RedEndCheck(typeValue, down);
+                    break;
+                case 1:
+                    if (downs.isBlue)
                     {
-                        bluelist[bluecount] = down;
-                        bluecount++;
-                        downs.isConnect = true;
-                        PaintCheck(col, row - 1, typeValue, colorValue);
+                        if (downs.isConnect == false)
+                        {
+                            bluelist[bluecount] = down;
+                            bluecount++;
+                            downs.isConnect = true;
+                            PaintCheck(col, row - 1, typeValue, colorValue);
+                        }
                     }
-                }
-                break;
-            case 2:
-                if (downs.isYellow)
-                {
-                    if (downs.isConnect == false)
-                    {
-                        yellowlist[yellowcount] = down;
-                        yellowcount++;
-                        downs.isConnect = true;
-                        PaintCheck(col, row - 1, typeValue, colorValue);
-                    }
-                }
-                YellowEndCheck();
-                break;
-        }
+                    break;
+
+            }
+        
     }
     #endregion
 
@@ -554,7 +521,7 @@ public class LineCreate : MonoBehaviour
                 {
                     if (obj.gameObject.tag == "ScreenDoor" || obj.gameObject.tag == "Block" || obj.gameObject.tag == "Cannon")
                     {
-                        isEnd = true;
+                        isRedEnd = true;
                         obj.isConnect = true;
                         obj.typeAct();
                     }
@@ -565,7 +532,7 @@ public class LineCreate : MonoBehaviour
                 {
                     if (obj.gameObject.tag == "Hose")
                     {
-                        isEnd = true;
+                        isRedEnd = true;
                         obj.isConnect = true;
                         obj.typeAct();
                     }
@@ -576,7 +543,7 @@ public class LineCreate : MonoBehaviour
                 {
                     if (obj.gameObject.tag == "Cannon")
                     {
-                        isEnd = true;
+                        isRedEnd = true;
                         obj.isConnect = true;
                         obj.typeAct();
                     }
@@ -592,13 +559,8 @@ public class LineCreate : MonoBehaviour
 
         Debug.Log("ori " + oriCol);
         Debug.Log("ori " + oriRow);
-        obj.Change(col, row,oriCol,oriRow);
     }
 
-    void YellowEndCheck()
-    {
-        Debug.Log("YellowEnd");
-    }
 
     #endregion
 

@@ -22,21 +22,11 @@ public class Board : MonoBehaviour
         battery = allTiles[0, 3];
         battery.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
         battery.GetComponent<SpriteRenderer>().color = Color.green;
-        battery.gameObject.tag = "Water";
+        battery.gameObject.tag = "Battery";
 
-        fire = allTiles[2, 8];
-        fire.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
-        fire.GetComponent<SpriteRenderer>().color = Color.red;
-        fire.gameObject.tag = "Fire";
-
-        ends = allTiles[2, 3];
-        ends.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
-        ends.GetComponent<SpriteRenderer>().color = Color.black;
-        ends.gameObject.tag = "Hose";
-
-        cannon = allTiles[3, 0];
+        cannon = allTiles[5, 9];
         cannon.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
-        cannon.GetComponent<SpriteRenderer>().color = Color.blue;
+        cannon.GetComponent<SpriteRenderer>().color = Color.black;
         cannon.gameObject.tag = "Cannon";
 
     }

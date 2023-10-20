@@ -8,7 +8,10 @@ using static UnityEngine.GraphicsBuffer;
 public class PlayerController : MonoBehaviour
 {
     Board board;
-    LineCreate lineCreate;
+    LineChecker lineChecker;
+
+    RedCheck redCheck;
+    BlueCheck blueCheck;
 
     GameObject myTail;
 
@@ -56,27 +59,20 @@ public class PlayerController : MonoBehaviour
         if (isSpacePress)
         {
             var obj = board.allTiles[column, row].GetComponent<Tiles>();
-            if (obj.objectType == Tiles.ObejctType.None)
+            if (obj.objectType == Tiles.ObejctType.None) //맨바닥에서만 작동하도록
             {
                 var boards = board.allTiles[column, row].GetComponent<SpriteRenderer>();
                 boards.color = tailC;
-                lineCreate.findBlue = 0;
-                switch (tailvalue)
+                switch (tailvalue)  //꼬리 값 즉 꼬리색에 따라 바닥에 칠하는 거
                 {
                     case 0:
-                        var a = board.allTiles[column, row].GetComponent<Tiles>();
-                        if (a.isBlue)
+                        var a = board.allTiles[column, row].GetComponent<Tiles>(); //지금 밑바닥
+                        if (a.isBlue) //파란색이면 지우고 반납
                         {
                             myBlue++;
                             myRed--;
-                            lineCreate.isBlueEnd = false;
-                            if (myBlue != 0)
-                            {
-                                if (lineCreate.isCanChange)
-                                {
-                                    lineCreate.BlueBack();
-                                }
-                            }
+                            blueCheck.ResetBlue();
+                            blueCheck.blueChangeBack();
                         }
                         else if (a.isYellow)
                         {
@@ -112,7 +108,7 @@ public class PlayerController : MonoBehaviour
                         {
 
                         }
-                        else
+                        else //맨바닥임
                         {
                             myBlue--;
                         }
@@ -131,23 +127,13 @@ public class PlayerController : MonoBehaviour
                         else if (c.isBlue)
                         {
                             myBlue++;
-                            lineCreate.isBlueEnd = false;
-                            myYellow--; 
-                            if (myBlue != 0)
-                            {
-                                if (lineCreate.isCanChange)
-                                {
-                                    lineCreate.BlueBack();
-                                }
-                            }
+                            myYellow--;
+                            blueCheck.ResetBlue();
+                            blueCheck.blueChangeBack();
                         }
                         else if (c.isYellow)
                         {
 
-                        }
-                        else
-                        {
-                            myYellow--;
                         }
                         c.isRed = false;
                         c.isBlue = false;
@@ -155,11 +141,7 @@ public class PlayerController : MonoBehaviour
                         c.isConnect = false;
                         break;
                 }
-                lineCreate.isEnd = false;
-                lineCreate.ResetRed();
-                lineCreate.ResetBlue();
-                lineCreate.FindStartTypeAct();
-                lineCreate.disconnect();
+                lineChecker.FindObject();
             }
         }
     }
@@ -168,53 +150,52 @@ public class PlayerController : MonoBehaviour
     void OnKeyboard()
     {
         //이동만이에용
-        if (Input.GetKeyDown(KeyCode.W)) 
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            if ( row < board.Height-1)
+            if (row < board.Height - 1)
             {
                 var a = board.allTiles[column, row + 1].GetComponent<Tiles>().objectType;
                 if (a == Tiles.ObejctType.None)
                 {
-
                     row++;
                 }
-                else if( a== Tiles.ObejctType.Object)
+                else if (a == Tiles.ObejctType.Object)
                 {
-                    if(board.allTiles[column, row + 1].gameObject.tag == "Water")
+                    if (board.allTiles[column, row + 1].gameObject.tag == "Water")
                     {
                         row++;
                     }
                 }
-            }
-            if (isSpacePress)
-            {
-                switch (tailvalue)
+                if (isSpacePress)
                 {
-                    case 0:
-                        if (myRed > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 1:
-                        if (myBlue > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 2:
-                        if (myYellow > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
+                    switch (tailvalue)
+                    {
+                        case 0:
+                            if (myRed > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 1:
+                            if (myBlue > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 2:
+                            if (myYellow > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                    }
                 }
             }
         }
-        else if (Input.GetKeyDown(KeyCode.S)) 
+        else if (Input.GetKeyDown(KeyCode.S))
         {
             if (row > 0)
             {
@@ -227,35 +208,35 @@ public class PlayerController : MonoBehaviour
                 {
                     if (board.allTiles[column, row - 1].gameObject.tag == "Water")
                     {
-                        row++;
+                        row--;
                     }
                 }
-            }
-            if (isSpacePress)
-            {
-                switch (tailvalue)
+                if (isSpacePress)
                 {
-                    case 0:
-                        if (myRed > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 1:
-                        if (myBlue > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 2:
-                        if (myYellow > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
+                    switch (tailvalue)
+                    {
+                        case 0:
+                            if (myRed > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 1:
+                            if (myBlue > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 2:
+                            if (myYellow > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                    }
                 }
             }
         }
@@ -272,35 +253,35 @@ public class PlayerController : MonoBehaviour
                 {
                     if (board.allTiles[column + 1, row].gameObject.tag == "Water")
                     {
-                        row++;
+                        column++;
                     }
                 }
-            }
-            if (isSpacePress)
-            {
-                switch (tailvalue)
+                if (isSpacePress)
                 {
-                    case 0:
-                        if (myRed > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 1:
-                        if (myBlue > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 2:
-                        if (myYellow > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
+                    switch (tailvalue)
+                    {
+                        case 0:
+                            if (myRed > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 1:
+                            if (myBlue > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 2:
+                            if (myYellow > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                    }
                 }
             }
         }
@@ -317,37 +298,38 @@ public class PlayerController : MonoBehaviour
                 {
                     if (board.allTiles[column -1, row].gameObject.tag == "Water")
                     {
-                        row++;
+                        column--;
+                    }
+                }
+                if (isSpacePress)
+                {
+                    switch (tailvalue)
+                    {
+                        case 0:
+                            if (myRed > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 1:
+                            if (myBlue > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
+                        case 2:
+                            if (myYellow > 0 && a == Tiles.ObejctType.None)
+                            {
+                                isSpacePress = true;
+                                DrawPaint();
+                            }
+                            break;
                     }
                 }
             }
-            if (isSpacePress)
-            {
-                switch (tailvalue)
-                {
-                    case 0:
-                        if (myRed > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 1:
-                        if (myBlue > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                    case 2:
-                        if (myYellow > 0)
-                        {
-                            isSpacePress = true;
-                            DrawPaint();
-                        }
-                        break;
-                }
-            }
+            
         }
         //색 변경
         if (Input.GetKeyDown(KeyCode.LeftControl))
@@ -383,7 +365,11 @@ public class PlayerController : MonoBehaviour
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
         board = FindObjectOfType<Board>();
-        lineCreate = FindObjectOfType<LineCreate>();
+        lineChecker = FindObjectOfType<LineChecker>();
+
+        redCheck = FindObjectOfType<RedCheck>();
+        blueCheck = FindObjectOfType<BlueCheck>();
+
         myTail = GameObject.Find("Tail");
         GameManager.Inputs.KeyAction -= OnKeyboard;
         GameManager.Inputs.KeyAction += OnKeyboard;
