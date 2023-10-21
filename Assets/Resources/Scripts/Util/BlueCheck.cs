@@ -153,7 +153,7 @@ public class BlueCheck : MonoBehaviour
         to.isMoved = false;
         from.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 
-        //yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.1f);
         lineChecker.FindObject();
     }
 

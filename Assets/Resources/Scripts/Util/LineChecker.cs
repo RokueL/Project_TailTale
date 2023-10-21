@@ -11,6 +11,9 @@ public class LineChecker : MonoBehaviour
     Board board;
     PlayerController playerController;
 
+
+    bool isNotDisconnect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +33,7 @@ public class LineChecker : MonoBehaviour
     IEnumerator findObject() 
     {
         yield return new WaitForSeconds(.1f);
+        redCheck.AllReset();
         for(int i = 0; i < board.Width; i++)
         {
             for (int j = 0; j < board.Height; j++)
@@ -81,6 +85,150 @@ public class LineChecker : MonoBehaviour
                     }
                 }
             }
+        }
+
+        for (int i = 0; i < board.Width; i++)
+        {
+            for (int j = 0; j < board.Height; j++)
+            {
+                var a = board.allTiles[i, j].GetComponent<Tiles>();
+                if (a.objectType == Tiles.ObejctType.End)
+                {
+                    if (a.isConnect)
+                    {
+                        DisconnectEnds(i, j);
+                    }
+                }
+            }
+        }
+    }
+
+    void DisconnectEnds(int col, int row)
+    {
+        var a = board.allTiles[col, row].GetComponent<Tiles>();
+        isNotDisconnect = false;
+        Debug.Log(a.gameObject);
+        if (row > 0 && row < board.Height - 1)
+        {
+            GameObject up = board.allTiles[col, row + 1];
+            GameObject down = board.allTiles[col, row - 1];
+            var ups = up.GetComponent<Tiles>();
+            var downs = down.GetComponent<Tiles>();
+            if (ups.isRed)
+            {
+                if (ups.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            else if (downs.isRed)
+            {
+                if (downs.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            if (ups.objectType == Tiles.ObejctType.Object || downs.objectType == Tiles.ObejctType.Object)
+            {
+                isNotDisconnect = true;
+            }
+        }
+        else if (row == 0)
+        {
+            GameObject up = board.allTiles[col, row + 1];
+            var ups = up.GetComponent<Tiles>();
+            if (ups.isRed)
+            {
+                if (ups.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            else if (ups.objectType == Tiles.ObejctType.Object)
+            {
+                isNotDisconnect = true;
+            }
+        }
+
+        else if (row == board.Height - 1)
+        {
+            GameObject down = board.allTiles[col, row - 1];
+            var downs = down.GetComponent<Tiles>();
+            if (downs.isRed)
+            {
+                if (downs.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            else if (downs.objectType == Tiles.ObejctType.Object)
+            {
+                isNotDisconnect = true;
+            }
+        }
+        ////////////////////////////////////////////
+        if (col > 0 && col < board.Width - 1)
+        {
+            GameObject left = board.allTiles[col - 1, row];
+            GameObject right = board.allTiles[col + 1, row];
+            var lefts = left.GetComponent<Tiles>();
+            var rights = right.GetComponent<Tiles>();
+            if (lefts.isRed)
+            {
+                if (lefts.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            if (rights.isRed)
+            {
+                if (rights.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            if (lefts.objectType == Tiles.ObejctType.Object || rights.objectType == Tiles.ObejctType.Object)
+            {
+                isNotDisconnect = true;
+            }
+        }
+        else if (col == 0)
+        {
+            GameObject right = board.allTiles[col + 1, row];
+            var rights = right.GetComponent<Tiles>();
+            if (rights.isRed)
+            {
+                if (rights.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            if (rights.objectType == Tiles.ObejctType.Object)
+            {
+                isNotDisconnect = true;
+            }
+        }
+        else if (col == board.Width - 1)
+        {
+            GameObject left = board.allTiles[col - 1, row];
+            var lefts = left.GetComponent<Tiles>();
+            if (lefts.isRed)
+            {
+                if (lefts.isConnect)
+                {
+                    isNotDisconnect = true;
+                }
+            }
+            else if (lefts.objectType == Tiles.ObejctType.Object)
+            {
+                isNotDisconnect = true;
+            }
+        }
+
+        if (!isNotDisconnect)
+        {
+            a.isConnect = false;
+            a.typeAct();
         }
     }
 

@@ -29,10 +29,10 @@ public class Board : MonoBehaviour
         cannon.GetComponent<SpriteRenderer>().color = Color.gray;
         cannon.gameObject.tag = "Hose";
 
-        //fire = allTiles[5, 7];
-        //fire.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
-        //fire.GetComponent<SpriteRenderer>().color = Color.red;
-        //fire.gameObject.tag = "Fire";
+        fire = allTiles[5, 7];
+        fire.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire.GetComponent<SpriteRenderer>().color = Color.red;
+        fire.gameObject.tag = "Fire";
 
     }
 
