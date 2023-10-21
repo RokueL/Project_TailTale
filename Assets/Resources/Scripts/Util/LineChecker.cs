@@ -6,6 +6,7 @@ public class LineChecker : MonoBehaviour
 {
     RedCheck redCheck;
     BlueCheck blueCheck;
+    YellowCheck yellowCheck;
 
     Board board;
     PlayerController playerController;
@@ -15,6 +16,7 @@ public class LineChecker : MonoBehaviour
     {
         redCheck = FindObjectOfType<RedCheck>();
         blueCheck = FindObjectOfType<BlueCheck>();
+        yellowCheck = FindObjectOfType<YellowCheck>();
 
         board = FindObjectOfType<Board>();
         playerController = FindObjectOfType<PlayerController>();
@@ -35,7 +37,7 @@ public class LineChecker : MonoBehaviour
                 var a = board.allTiles[i, j].GetComponent<Tiles>();
                 if (a.objectType == Tiles.ObejctType.Object)  // 배터리 0 불 1 물 2
                 {
-                    if (a.gameObject.tag == "Battery")
+                    if (a.gameObject.tag == "Battery")  // 이동 가능, 빨간색 체크 필요
                     {
                         if (playerController.myBlue == 0)
                         {
@@ -43,15 +45,11 @@ public class LineChecker : MonoBehaviour
                         }
                         redCheck.RedCheckStart(i, j, 0);
                     }
-                    else if (a.gameObject.tag == "Fire")
+                    else if (a.gameObject.tag == "Fire")   // 빨간색 체크 필요
                     {
-                        if (playerController.myBlue == 0)
-                        {
-                            blueCheck.BlueCheckStart(i, j, 1, i, j);
-                        }
                         redCheck.RedCheckStart(i, j, 1);
                     }
-                    else if (a.gameObject.tag == "Water")
+                    else if (a.gameObject.tag == "Water")  // 이동 가능, 빨간색 체크 필요
                     {
                         if (playerController.myBlue == 0)
                         {
@@ -64,20 +62,22 @@ public class LineChecker : MonoBehaviour
 
                 if(a.objectType == Tiles.ObejctType.End) // 캐논 3 호스 4
                 {
-                    if (a.gameObject.tag == "Cannon")
+                    if (a.gameObject.tag == "Cannon")   // 회전 가능, 이동 가능
                     {
                         if (playerController.myBlue == 0)
                         {
                             Debug.Log("Cannon Start");
                             blueCheck.BlueCheckStart(i, j, 3, i, j);
                         }
+                        yellowCheck.YellowRotation(i,j);
                     }
-                    if (a.gameObject.tag == "Hose")
+                    if (a.gameObject.tag == "Hose")   // 회전 가능, 이동 가능
                     {
                         if (playerController.myBlue == 0)
                         {
                             blueCheck.BlueCheckStart(i, j, 4, i, j);
                         }
+                        yellowCheck.YellowRotation(i, j);
                     }
                 }
             }

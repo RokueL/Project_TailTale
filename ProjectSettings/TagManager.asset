@@ -13,6 +13,7 @@ TagManager:
   - Block
   - Hose
   - Cannon
+  - WaterShot
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     RedCheck redCheck;
     BlueCheck blueCheck;
+    YellowCheck yellowCheck;
 
     GameObject myTail;
 
@@ -78,6 +79,7 @@ public class PlayerController : MonoBehaviour
                         {
                             myYellow++;
                             myRed--;
+
                         }
                         else if (a.isRed)
                         {
@@ -369,6 +371,7 @@ public class PlayerController : MonoBehaviour
 
         redCheck = FindObjectOfType<RedCheck>();
         blueCheck = FindObjectOfType<BlueCheck>();
+        yellowCheck = FindObjectOfType<YellowCheck>();
 
         myTail = GameObject.Find("Tail");
         GameManager.Inputs.KeyAction -= OnKeyboard;
@@ -468,7 +471,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
-            Debug.Log("space up");
             isSpacePress = false;
         }
     }

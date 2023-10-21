@@ -6,6 +6,8 @@ using UnityEngine;
 public class BlueCheck : MonoBehaviour
 {
     Board board;
+    RedCheck redCheck;
+    LineChecker lineChecker;
 
     int oriCol, oriRow;
     int c, r;
@@ -112,15 +114,22 @@ public class BlueCheck : MonoBehaviour
         to.isRed = false;
         to.isBlue = false;
         to.isYellow = false;
+
         to.isUp = from.isUp;
         to.isDown = from.isDown;
         to.isRight = from.isRight;
         to.isLeft = from.isLeft;
+        to.isIndexUp = from.isIndexUp;
+        to.isIndexDown = from.isIndexDown;
+        to.isIndexLeft = from.isIndexLeft;
+        to.isIndexRight = from.isIndexRight;
+
         to.isConnect = true;
         to.isCanMove = true;
         to.isMoved = true;
         TypeImage(typeValue, to);
 
+        ////////////////////////////////////////////////////
         from.originCol = c;
         from.originRow = r;
 
@@ -129,36 +138,43 @@ public class BlueCheck : MonoBehaviour
         from.isRed = false;
         from.isBlue = true;
         from.isYellow = false;
+
         from.isUp = false;
         from.isDown = false;
         from.isRight = false;
         from.isLeft = false;
+        to.isIndexUp = false;
+        to.isIndexDown = false;
+        to.isIndexLeft = false;
+        to.isIndexRight = false;
+
         from.isConnect = true;
         from.isCanMove = true;
         to.isMoved = false;
         from.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
 
-
+        //yield return new WaitForSeconds(.1f);
+        lineChecker.FindObject();
     }
 
-    void TypeImage(int typeValue, Tiles to)
+    void TypeImage(int typeValue, Tiles to) 
     {
         var obj = to.gameObject.GetComponent<SpriteRenderer>();
         switch(typeValue)
         {
-            case 0:
+            case 0:  // 배터리
                 obj.color = Color.green;
                 break;
-            case 1:
+            case 1:  // 불
                 obj.color = Color.red;
                 break;
-            case 2:
+            case 2: // 물
                 obj.color = new Color(0,255,255);
                 break;
-            case 3:
-                obj.color = Color.black;
+            case 3: // 캐논
+                obj.color = Color.gray;
                 break;
-            case 4:
+            case 4: // 호스
                 obj.color = Color.black;
                 break;
 
@@ -187,10 +203,17 @@ public class BlueCheck : MonoBehaviour
                     a.isRed = false;
                     a.isBlue = false;
                     a.isYellow = false;
+
                     a.isUp = movedObject.isUp;
                     a.isDown = movedObject.isDown;
                     a.isRight = movedObject.isRight;
                     a.isLeft = movedObject.isLeft;
+
+                    a.isIndexUp = movedObject.isIndexUp;
+                    a.isIndexDown = movedObject.isIndexDown;
+                    a.isIndexRight = movedObject.isIndexRight;
+                    a.isIndexLeft = movedObject.isIndexLeft;
+
                     a.isConnect = true;
                     a.isCanMove = true;
                     a.isMoved = false;
@@ -204,10 +227,17 @@ public class BlueCheck : MonoBehaviour
                     movedObject.isRed = false;
                     movedObject.isBlue = true;
                     movedObject.isYellow = false;
+
                     movedObject.isUp = false;
                     movedObject.isDown = false;
                     movedObject.isRight = false;
                     movedObject.isLeft = false;
+
+                    movedObject.isIndexUp = false;
+                    movedObject.isIndexDown = false;
+                    movedObject.isIndexRight = false;
+                    movedObject.isIndexLeft = false;
+
                     movedObject.isConnect = false;
                     movedObject.isCanMove = false;
                     movedObject.isMoved = false;
@@ -283,6 +313,8 @@ public class BlueCheck : MonoBehaviour
     void Start()
     {
         board = FindObjectOfType<Board>();
+        redCheck = FindObjectOfType<RedCheck>();
+        lineChecker = FindObjectOfType<LineChecker>();
     }
 
     // Update is called once per frame

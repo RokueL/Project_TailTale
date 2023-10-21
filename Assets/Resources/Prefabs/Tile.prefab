@@ -97,3 +97,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d6478da7154db43a49df8ee1500e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  up: {fileID: 0}
+  down: {fileID: 0}
+  left: {fileID: 0}
+  right: {fileID: 0}
+  objectType: 0
+  isRed: 0
+  isBlue: 0
+  isYellow: 0
+  isConnect: 0
+  isMoved: 0
+  isCanMove: 0
+  isRotation3: 0
+  isRotation5: 0
+  isUp: 0
+  isDown: 0
+  isLeft: 0
+  isRight: 0
+  isIndexUp: 0
+  isIndexDown: 0
+  isIndexLeft: 0
+  isIndexRight: 0
+  col: 0
+  row: 0
+  originCol: 0
+  originRow: 0
+  changeCol: 0
+  changeRow: 0
