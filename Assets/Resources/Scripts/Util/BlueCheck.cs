@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Tiles;
 
 public class BlueCheck : MonoBehaviour
 {
     Board board;
     RedCheck redCheck;
     LineChecker lineChecker;
+
+    Sprite def;
 
     int oriCol, oriRow;
     int c, r;
@@ -72,13 +75,16 @@ public class BlueCheck : MonoBehaviour
         {
             if (!isBlueEnd)
             {
-                Debug.Log("5개 이어짐");
-                isBlueEnd = true;
-                StartCoroutine(BlueChange(col, row, typeValue, oriC, oriR));
-                return;
+                if (!board.allTiles[oriC, oriR].GetComponent<Tiles>().isConnect)
+                {
+                    Debug.Log("5개 이어짐");
+                    isBlueEnd = true;
+                    StartCoroutine(BlueChange(col, row, typeValue, oriC, oriR));
+                    return;
+                }
             }
         }
-        if( bluecount < 5)
+        if (bluecount < 5)
         {
             Debug.Log("아입니더");
             if (board.allTiles[oriC, oriR].GetComponent<Tiles>().isMoved)
@@ -92,6 +98,27 @@ public class BlueCheck : MonoBehaviour
             }
         }
 
+    }
+
+    void waterClear()
+    {
+        for(int i = 0; i< board.Width; i++)
+        {
+            for(int j = 0; j < board.Height; j++)
+            {
+                var b = board.allTiles[i, j].GetComponent<Tiles>();
+                if (b.objectType == ObejctType.WaterShot)
+                {
+                    if (b.gameObject.tag == "WaterShot")
+                    {
+                        b.objectType = ObejctType.None;
+                        b.gameObject.tag = "Untagged";
+                        b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                    }
+
+                }
+            }
+        }
     }
 
     IEnumerator BlueChange(int col, int row, int typeValue, int oriC, int oriR) // 배터리 0 불 1 물 2 캐논 3 호스 4
@@ -111,6 +138,7 @@ public class BlueCheck : MonoBehaviour
 
         to.gameObject.tag = from.gameObject.tag;
         to.objectType = from.objectType;
+        to.GetComponent<SpriteRenderer>().sprite = from.GetComponent<SpriteRenderer>().sprite;
         to.isRed = false;
         to.isBlue = false;
         to.isYellow = false;
@@ -143,15 +171,16 @@ public class BlueCheck : MonoBehaviour
         from.isDown = false;
         from.isRight = false;
         from.isLeft = false;
-        to.isIndexUp = false;
-        to.isIndexDown = false;
-        to.isIndexLeft = false;
-        to.isIndexRight = false;
+        from.isIndexUp = false;
+        from.isIndexDown = false;
+        from.isIndexLeft = false;
+        from.isIndexRight = false;
 
         from.isConnect = true;
         from.isCanMove = true;
-        to.isMoved = false;
+        from.isMoved = false;
         from.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+        from.gameObject.GetComponent<SpriteRenderer>().sprite = def;
 
         yield return new WaitForSeconds(.1f);
         lineChecker.FindObject();
@@ -175,7 +204,7 @@ public class BlueCheck : MonoBehaviour
                 obj.color = Color.gray;
                 break;
             case 4: // 호스
-                obj.color = Color.black;
+                obj.color = Color.gray;
                 break;
 
         }
@@ -200,6 +229,7 @@ public class BlueCheck : MonoBehaviour
 
                     a.gameObject.tag = movedObject.gameObject.tag;
                     a.objectType = movedObject.objectType;
+                    a.gameObject.GetComponent<SpriteRenderer>().sprite = movedObject.gameObject.GetComponent<SpriteRenderer>().sprite;
                     a.isRed = false;
                     a.isBlue = false;
                     a.isYellow = false;
@@ -242,12 +272,14 @@ public class BlueCheck : MonoBehaviour
                     movedObject.isCanMove = false;
                     movedObject.isMoved = false;
                     movedObject.gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+                    movedObject.gameObject.GetComponent<SpriteRenderer>().sprite = def;
 
                     a.originCol = a.col;
                     a.originRow = a.row;
                 }
             }
         }
+        waterClear();
     }
     #region DIRECTION
     void BlueUp(int col, int row, int typeValue, int oriC, int oriR)
@@ -312,6 +344,7 @@ public class BlueCheck : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        def = Resources.Load<Sprite>("Textures/TableTile");
         board = FindObjectOfType<Board>();
         redCheck = FindObjectOfType<RedCheck>();
         lineChecker = FindObjectOfType<LineChecker>();

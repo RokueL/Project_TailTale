@@ -107,7 +107,6 @@ public class LineChecker : MonoBehaviour
     {
         var a = board.allTiles[col, row].GetComponent<Tiles>();
         isNotDisconnect = false;
-        Debug.Log(a.gameObject);
         if (row > 0 && row < board.Height - 1)
         {
             GameObject up = board.allTiles[col, row + 1];

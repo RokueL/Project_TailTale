@@ -114,7 +114,6 @@ public class Tiles : MonoBehaviour
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
-                            b.isYellow = false;
                             b.isConnect = false;
                         }
                     }
@@ -153,7 +152,6 @@ public class Tiles : MonoBehaviour
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
-                            b.isYellow = false;
                             b.isConnect = false;
                         }
                     }
@@ -192,7 +190,6 @@ public class Tiles : MonoBehaviour
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
-                            b.isYellow = false;
                             b.isConnect = false;
                         }
                     }
@@ -231,7 +228,6 @@ public class Tiles : MonoBehaviour
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
-                            b.isYellow = false;
                             b.isConnect = false;
                         }
                     }
@@ -259,7 +255,14 @@ public class Tiles : MonoBehaviour
                         {
                             b.objectType = ObejctType.None;
                             b.gameObject.tag = "Untagged";
-                            b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            if (b.isYellow)
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            }
+                            else
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            }
                         }
 
                     }
@@ -276,8 +279,15 @@ public class Tiles : MonoBehaviour
                         if (b.gameObject.tag == "WaterShot")
                         {
                             b.objectType = ObejctType.None;
-                            b.gameObject.tag = "Untagged";
-                            b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            b.gameObject.tag = "Untagged"; 
+                            if (b.isYellow)
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            }
+                            else
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            }
                         }
 
                     }
@@ -295,7 +305,14 @@ public class Tiles : MonoBehaviour
                         {
                             b.objectType = ObejctType.None;
                             b.gameObject.tag = "Untagged";
-                            b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            if (b.isYellow)
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            }
+                            else
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            }
                         }
 
                     }
@@ -313,7 +330,14 @@ public class Tiles : MonoBehaviour
                         {
                             b.objectType = ObejctType.None;
                             b.gameObject.tag = "Untagged";
-                            b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            if (b.isYellow)
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            }
+                            else
+                            {
+                                b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                            }
                         }
 
                     }
@@ -324,6 +348,82 @@ public class Tiles : MonoBehaviour
     void CannonShot()
     {
         gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        if (isUp)
+        {
+
+            for (int i = row + 1; i < board.Height; i++)
+            {
+                var b = board.allTiles[col, i].GetComponent<Tiles>();
+                if (b.objectType == ObejctType.Rock)
+                {
+                    b.objectType = ObejctType.None;
+                    b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                    b.isRed = false;
+                    b.isBlue = false;
+                    b.isYellow = false;
+                    b.isConnect = false;
+                }
+            }
+
+        }
+        else if (isDown)
+        {
+
+            for (int i = row - 1; i >= 0; i--)
+            {
+                var b = board.allTiles[col, i].GetComponent<Tiles>();
+                if (b.objectType == ObejctType.Rock)
+                {
+                    b.objectType = ObejctType.None;
+                    b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                    b.isRed = false;
+                    b.isBlue = false;
+                    b.isYellow = false;
+                    b.isConnect = false;
+                }
+            }
+
+        }
+        else if (isLeft)
+        {
+            for (int i = col - 1; i >= 0; i--)
+            {
+                var b = board.allTiles[i, row].GetComponent<Tiles>();
+                if (b.objectType == ObejctType.Rock)
+                {
+                    b.objectType = ObejctType.None;
+                    b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                    b.isRed = false;
+                    b.isBlue = false;
+                    b.isYellow = false;
+                    b.isConnect = false;
+                }
+            }
+        }
+        else if (isRight)
+        {
+            Debug.Log(" 오른쪽 발사");
+            for (int i = col; i < board.Width; i++)
+            {
+                var b = board.allTiles[i, row].GetComponent<Tiles>();
+                if (b.objectType == ObejctType.Rock)
+                {
+                    Debug.Log("돌 부숨");
+                    b.objectType = ObejctType.None;
+                    b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                    b.isRed = false;
+                    b.isBlue = false;
+                    b.isYellow = false;
+                    b.isConnect = false;
+                }
+            }
+
+        }
+
     }
 
     void CannonStop()

@@ -24,15 +24,31 @@ public class Board : MonoBehaviour
         battery.GetComponent<SpriteRenderer>().color = new Color32(0,102,255,255);
         battery.gameObject.tag = "Water";
 
-        cannon = allTiles[5, 3];
+        cannon = allTiles[4, 2];
         cannon.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
         cannon.GetComponent<SpriteRenderer>().color = Color.gray;
         cannon.gameObject.tag = "Hose";
 
-        fire = allTiles[5, 7];
+        var fire1 = allTiles[8, 3];
+        fire1.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire1.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
+        fire1.gameObject.tag = "Fire";
+
+        fire = allTiles[0, 7];
         fire.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
-        fire.GetComponent<SpriteRenderer>().color = Color.red;
+        fire.GetComponent<SpriteRenderer>().color = new Color32(153,0,0,255);
         fire.gameObject.tag = "Fire";
+
+        cannon = allTiles[2, 6];
+        cannon.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
+        cannon.GetComponent<SpriteRenderer>().color = Color.gray;
+        cannon.gameObject.tag = "Cannon";
+
+
+        var rock = allTiles[8, 7];
+        rock.GetComponent<Tiles>().objectType = Tiles.ObejctType.Rock;
+        rock.GetComponent<SpriteRenderer>().color = new Color32(175,47,0,255);
+        rock.gameObject.tag = "Rock";
 
     }
 

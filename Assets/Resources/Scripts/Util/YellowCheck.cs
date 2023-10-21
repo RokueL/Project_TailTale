@@ -36,157 +36,172 @@ public class YellowCheck : MonoBehaviour
         if (obj.isIndexUp)
         {
             YellowUp(col, row + 1);
-            if (yellowCount == 3)
+            if (!obj.isConnect)
             {
-                if (isTurnLeft)
+                if (yellowCount == 3)
                 {
-                    Debug.Log("왼쪽으로 돌아유");
-                    obj.isUp = false;
-                    obj.isDown = false;
-                    obj.isLeft = true;
-                    obj.isRight = false;
+                    if (isTurnLeft)
+                    {
+                        obj.isUp = false;
+                        obj.isDown = false;
+                        obj.isLeft = true;
+                        obj.isRight = false;
+                    }
+                    else if (isTurnRight)
+                    {
+                        obj.isUp = false;
+                        obj.isDown = false;
+                        obj.isLeft = false;
+                        obj.isRight = true;
+                    }
                 }
-                else if (isTurnRight)
+                else if (yellowCount == 5)
                 {
-                    Debug.Log("오른쪽으로 돌아유");
                     obj.isUp = false;
-                    obj.isDown = false;
-                    obj.isLeft = false;
-                    obj.isRight = true;
-                }
-            }
-            else if (yellowCount == 5)
-            {
-                Debug.Log("뒤집어");
-                obj.isUp = false;
-                obj.isDown = true;
-                obj.isLeft = false;
-                obj.isRight = false;
-            }
-            else if (yellowCount < 3)
-            {
-                {
-                    obj.isUp = true;
-                    obj.isDown = false;
+                    obj.isDown = true;
                     obj.isLeft = false;
                     obj.isRight = false;
+                }
+                else if (yellowCount < 3)
+                {
+                    {
+                        obj.isUp = true;
+                        obj.isDown = false;
+                        obj.isLeft = false;
+                        obj.isRight = false;
+                        isTurnLeft = false;
+                        isTurnRight = false;
+                    }
                 }
             }
         }
-        
-        else if(obj.isIndexDown)
+
+        else if (obj.isIndexDown)
         {
             YellowDown(col, row - 1);
-            if (yellowCount == 3)
+
+            if (!obj.isConnect)
             {
-                if (isTurnLeft)
+                if (yellowCount == 3)
                 {
-                    obj.isUp = false;
+                    if (isTurnLeft)
+                    {
+                        obj.isUp = false;
+                        obj.isDown = false;
+                        obj.isLeft = true;
+                        obj.isRight = false;
+                    }
+                    else if (isTurnRight)
+                    {
+                        obj.isUp = false;
+                        obj.isDown = false;
+                        obj.isLeft = false;
+                        obj.isRight = true;
+                    }
+                }
+                else if (yellowCount == 5)
+                {
                     obj.isDown = false;
-                    obj.isLeft = true;
+                    obj.isUp = true;
+                    obj.isLeft = false;
                     obj.isRight = false;
                 }
-                else if (isTurnRight)
+                else if (yellowCount < 3)
                 {
                     obj.isUp = false;
-                    obj.isDown = false;
+                    obj.isDown = true;
                     obj.isLeft = false;
-                    obj.isRight = true;
+                    obj.isRight = false;
+                    isTurnLeft = false;
+                    isTurnRight = false;
                 }
-            }
-            else if (yellowCount == 5)
-            {
-                Debug.Log("뒤집어");
-                obj.isDown = false;
-                obj.isUp = true;
-                obj.isLeft = false;
-                obj.isRight = false;
-            }
-            else if (yellowCount < 3)
-            {
-                obj.isUp = false;
-                obj.isDown = true;
-                obj.isLeft = false;
-                obj.isRight = false;
             }
         }
         else if (obj.isIndexLeft)
         {
             YellowLeft(col - 1, row);
-            if (yellowCount == 3)
+            if (!obj.isConnect)
             {
-                if (isTurnLeft)
+                if (yellowCount == 3)
+                {
+                    if (isTurnLeft)
+                    {
+                        obj.isUp = false;
+                        obj.isDown = true;
+                        obj.isLeft = false;
+                        obj.isRight = false;
+                    }
+                    else if (isTurnRight)
+                    {
+                        obj.isUp = true;
+                        obj.isDown = false;
+                        obj.isLeft = false;
+                        obj.isRight = false;
+                    }
+                }
+                else if (yellowCount == 5)
+                {
+                    obj.isLeft = false;
+                    obj.isRight = true;
+                    obj.isUp = false;
+                    obj.isDown = false;
+                }
+                else if (yellowCount < 3)
                 {
                     obj.isUp = false;
-                    obj.isDown = true;
-                    obj.isLeft = false;
-                    obj.isRight = false;
-                }
-                else if (isTurnRight)
-                {
-                    obj.isUp = true;
                     obj.isDown = false;
-                    obj.isLeft = false;
+                    obj.isLeft = true;
                     obj.isRight = false;
+                    isTurnLeft = false;
+                    isTurnRight = false;
                 }
-            }
-            else if (yellowCount == 5)
-            {
-                obj.isLeft = false;
-                obj.isRight = true;
-                obj.isUp = false;
-                obj.isDown = false;
-            }
-            else if (yellowCount < 3)
-            {
-                obj.isUp = false;
-                obj.isDown = false;
-                obj.isLeft = true;
-                obj.isRight = false;
             }
         }
         else if (obj.isIndexRight)
         {
             YellowRight(col + 1, row);
-            if (yellowCount == 3)
+
+            if (!obj.isConnect)
             {
-                if (isTurnLeft)
+                if (yellowCount == 3)
                 {
-                    Debug.Log("왼쪽으로 돌아유");
-                    obj.isUp = true;
+                    if (isTurnLeft)
+                    {
+                        obj.isUp = true;
+                        obj.isDown = false;
+                        obj.isLeft = false;
+                        obj.isRight = false;
+                    }
+                    else if (isTurnRight)
+                    {
+                        obj.isUp = false;
+                        obj.isDown = true;
+                        obj.isLeft = false;
+                        obj.isRight = false;
+                    }
+                }
+                else if (yellowCount == 5)
+                {
+                    obj.isRight = false;
+                    obj.isLeft = true;
+                    obj.isUp = false;
+                    obj.isDown = false;
+                }
+                else if (yellowCount < 3)
+                {
+                    obj.isUp = false;
                     obj.isDown = false;
                     obj.isLeft = false;
-                    obj.isRight = false;
+                    obj.isRight = true;
+                    isTurnLeft = false;
+                    isTurnRight = false;
                 }
-                else if (isTurnRight)
-                {
-                    Debug.Log("오른쪽으로 돌아유");
-                    obj.isUp = false;
-                    obj.isDown = true;
-                    obj.isLeft = false;
-                    obj.isRight = false;
-                }
-            }
-            else if (yellowCount == 5)
-            {
-                obj.isRight = false;
-                obj.isLeft = true;
-                obj.isUp = false;
-                obj.isDown = false;
-            }
-            else if (yellowCount < 3)
-            {
-                obj.isUp = false;
-                obj.isDown = false;
-                obj.isLeft = false;
-                obj.isRight = true;
             }
         }
     }
 
     void YellowUp(int col, int row)
     {
-        Debug.Log("업 체크");
         var obj = board.allTiles[col, row];
         Debug.Log(obj.name);
         if (obj != null && board.allTiles[col, row].GetComponent<Tiles>().isYellow) // 위
@@ -238,7 +253,6 @@ public class YellowCheck : MonoBehaviour
 
     void YellowDown(int col, int row) //다운 값을 가져옴
     {
-        Debug.Log("다운 체크");
         var obj = board.allTiles[col, row];
         Debug.Log(obj.name);
         if (obj != null && board.allTiles[col, row].GetComponent<Tiles>().isYellow) // 아래
@@ -283,7 +297,6 @@ public class YellowCheck : MonoBehaviour
 
     void YellowLeft(int col, int row)
     {
-        Debug.Log("왼 체크");
         var obj = board.allTiles[col, row];
         Debug.Log(obj.name);
         if (obj != null && board.allTiles[col, row].GetComponent<Tiles>().isYellow) // 왼
@@ -328,9 +341,7 @@ public class YellowCheck : MonoBehaviour
 
     void YellowRight(int col, int row)
     {
-        Debug.Log("오른쪽 체크");
         var obj = board.allTiles[col, row];
-        Debug.Log(obj.name);
         if (obj != null && board.allTiles[col, row].GetComponent<Tiles>().isYellow) // 오
         {
             yellowCount++;
