@@ -23,6 +23,8 @@ public class LineChecker : MonoBehaviour
 
         board = FindObjectOfType<Board>();
         playerController = FindObjectOfType<PlayerController>();
+        AllWallCheck();
+        BlockCheck();
     }
 
     public void FindObject()
@@ -33,6 +35,8 @@ public class LineChecker : MonoBehaviour
     IEnumerator findObject() 
     {
         yield return new WaitForSeconds(.1f);
+        AllWallCheck();
+        BlockCheck();
         redCheck.AllReset();
         for(int i = 0; i < board.Width; i++)
         {
@@ -84,6 +88,11 @@ public class LineChecker : MonoBehaviour
                         yellowCheck.YellowRotation(i, j);
                     }
                 }
+
+                if (a.objectType == Tiles.ObejctType.Block) // 이동 가능
+                {
+                    blueCheck.BlueCheckStart(i, j, 5, i, j);
+                }
             }
         }
 
@@ -101,7 +110,203 @@ public class LineChecker : MonoBehaviour
                 }
             }
         }
+        BlockCheck();
     }
+
+
+
+    void AllWallCheck()
+    {
+        for (int i = 0; i < board.Width; i++)
+        {
+            for (int j = 0; j < board.Height; j++)
+            {
+                var a = board.allTiles[i, j].GetComponent<Tiles>();
+                if (a.objectType == Tiles.ObejctType.Wall)
+                {
+                    a.gameObject.tag = "Untagged";
+                    a.objectType = Tiles.ObejctType.None;
+                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+            }
+        }
+    }
+
+    void BlockCheck()
+    {
+        for(int i = 0; i < board.Width; i++)
+        {
+            for(int j = 0; j < board.Height; j++)
+            {
+                var a = board.allTiles[i,j].GetComponent<Tiles>();
+                if(a.objectType == Tiles.ObejctType.Block)
+                {
+                    wallMake(i,j);
+                }
+            }
+        }
+    }
+
+    void wallMake(int col, int row)
+    {
+        var obj = board.allTiles[col,row].GetComponent<Tiles>();
+        if (col > 0 && col < board.Width - 1)
+        {
+            WallLeft(col - 1, row);
+            WallRight(col + 1, row);
+        }
+        else if(col == 0)
+        {
+            WallRight(col + 1, row);
+        }
+        else if(col == board.Width - 1)
+        {
+            WallLeft(col - 1, row);
+        }
+
+        if(row > 0 && row < board.Height - 1)
+        {
+            WallUp(col, row + 1);
+            WallDown(col, row - 1);
+        }
+        else if(row == 0)
+        {
+            WallUp(col, row + 1);
+        }
+        else if(row == board.Height - 1)
+        {
+            WallDown(col, row - 1);
+        }
+    }
+
+    void WallUp(int col, int row)
+    {
+        for (int i = row; i < board.Height; i++)
+        {
+            var b = board.allTiles[col, i].GetComponent<Tiles>().objectType;
+            if (b == Tiles.ObejctType.Block)
+            {
+                for (int j = row; j < i; j++)
+                {
+                    var a = board.allTiles[col, j].GetComponent<Tiles>();
+                    a.objectType = Tiles.ObejctType.Wall;
+                    a.gameObject.tag = "Wall";
+                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.isRed = false;
+                    a.isBlue = false;
+                    a.isYellow = false;
+                    a.isConnect = false;
+                    a.isCanMove = false;
+                }
+            }
+            else if (b == Tiles.ObejctType.None)
+            {
+
+            }
+            else
+            {
+                return;
+            }
+
+        }
+    }
+
+    void WallDown(int col, int row)
+    {
+        for (int i = row; i >= 0; i--)
+        {
+            var b = board.allTiles[col, i].GetComponent<Tiles>().objectType;
+            if (b == Tiles.ObejctType.Block)
+            {
+                for (int j = row; j > i; j--)
+                {
+                    var a = board.allTiles[col, j].GetComponent<Tiles>();
+                    a.objectType = Tiles.ObejctType.Wall;
+                    a.gameObject.tag = "Wall";
+                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.isRed = false;
+                    a.isBlue = false;
+                    a.isYellow = false;
+                    a.isConnect = false;
+                    a.isCanMove = false;
+                }
+            }
+            else if (b == Tiles.ObejctType.None)
+            {
+
+            }
+            else
+            {
+                return;
+            }
+
+        }
+    }
+
+    void WallRight(int col, int row)
+    {
+        for (int i = col; i < board.Width; i++)
+        {
+            var b = board.allTiles[i, row].GetComponent<Tiles>().objectType;
+            if (b == Tiles.ObejctType.Block)
+            {
+                for (int j = col; j < i; j++)
+                {
+                    var a = board.allTiles[j, row].GetComponent<Tiles>();
+                    a.objectType = Tiles.ObejctType.Wall;
+                    a.gameObject.tag = "Wall";
+                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.isRed = false;
+                    a.isBlue = false;
+                    a.isYellow = false;
+                    a.isConnect = false;
+                    a.isCanMove = false;
+                }
+            }
+            else if (b == Tiles.ObejctType.None)
+            {
+
+            }
+            else
+            {
+                return;
+            }
+
+        }
+    }
+
+    void WallLeft(int col, int row)
+    {
+        for (int i = col; i >= 0; i--)
+        {
+            var b = board.allTiles[i, row].GetComponent<Tiles>().objectType;
+            if (b == Tiles.ObejctType.Block)
+            {
+                for (int j = col; j > i; j--)
+                {
+                    var a = board.allTiles[j, row].GetComponent<Tiles>();
+                    a.objectType = Tiles.ObejctType.Wall;
+                    a.gameObject.tag = "Wall";
+                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.isRed = false;
+                    a.isBlue = false;
+                    a.isYellow = false;
+                    a.isConnect = false;
+                    a.isCanMove = false;
+                }
+            }
+            else if (b == Tiles.ObejctType.None)
+            {
+
+            }
+            else
+            {
+                return;
+            }
+
+        }
+    }
+
 
     void DisconnectEnds(int col, int row)
     {

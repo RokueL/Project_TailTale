@@ -13,6 +13,7 @@ public class Tiles : MonoBehaviour
         Object,
         Paint,
         End,
+        Block,
         Wall,
         Yet,
         WaterShot,
@@ -93,9 +94,9 @@ public class Tiles : MonoBehaviour
                 for (int i = row + 1; i < board.Height; i++)
                 {
                     var b = board.allTiles[col, i].GetComponent<Tiles>();
-                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object)
+                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object || b.objectType == ObejctType.WaterShot)
                     {
-                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged")
+                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged" || b.gameObject.tag == "WaterShot")
                         {
                             if (b.isRed)
                             {
@@ -117,9 +118,9 @@ public class Tiles : MonoBehaviour
                             b.isConnect = false;
                         }
                     }
-                    else if (b.objectType == ObejctType.Rock)
+                    else
                     {
-                        break;
+                        return;
                     }
                 }
             }
@@ -131,9 +132,9 @@ public class Tiles : MonoBehaviour
                 for (int i = row - 1; i >= 0; i--)
                 {
                     var b = board.allTiles[col, i].GetComponent<Tiles>();
-                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object)
+                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object || b.objectType == ObejctType.WaterShot)
                     {
-                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged")
+                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged" || b.gameObject.tag == "WaterShot")
                         {
                             if (b.isRed)
                             {
@@ -155,9 +156,9 @@ public class Tiles : MonoBehaviour
                             b.isConnect = false;
                         }
                     }
-                    else if (b.objectType == ObejctType.Rock)
+                    else
                     {
-                        break ;
+                        return;
                     }
                 }
             }
@@ -169,9 +170,9 @@ public class Tiles : MonoBehaviour
                 for (int i = col - 1; i >= 0; i--)
                 {
                     var b = board.allTiles[i, row].GetComponent<Tiles>();
-                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object)
+                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object || b.objectType == ObejctType.WaterShot)
                     {
-                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged")
+                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged" || b.gameObject.tag == "WaterShot")
                         {
                             if (b.isRed)
                             {
@@ -193,9 +194,9 @@ public class Tiles : MonoBehaviour
                             b.isConnect = false;
                         }
                     }
-                    else if (b.objectType == ObejctType.Rock)
+                    else
                     {
-                        break;
+                        return;
                     }
                 }
             }
@@ -207,9 +208,9 @@ public class Tiles : MonoBehaviour
                 for (int i = col + 1; i < board.Width; i++)
                 {
                     var b = board.allTiles[i, row].GetComponent<Tiles>();
-                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object)
+                    if (b.objectType == ObejctType.None || b.objectType == ObejctType.Object || b.objectType == ObejctType.WaterShot)
                     {
-                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged")
+                        if (b.gameObject.tag == "Fire" || b.gameObject.tag == "Untagged" || b.gameObject.tag == "WaterShot")
                         {
                             if (b.isRed)
                             {
@@ -231,9 +232,9 @@ public class Tiles : MonoBehaviour
                             b.isConnect = false;
                         }
                     }
-                    else if (b.objectType == ObejctType.Rock)
+                    else
                     {
-                        break;
+                        return;
                     }
                 }
             }

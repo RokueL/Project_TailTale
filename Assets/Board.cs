@@ -9,6 +9,7 @@ public class Board : MonoBehaviour
 
     public GameObject battery;
     public GameObject cannon;
+    public GameObject hose;
     public GameObject fire;
     public GameObject ends;
 
@@ -21,34 +22,45 @@ public class Board : MonoBehaviour
         SetUp();
         battery = allTiles[0, 3];
         battery.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
-        battery.GetComponent<SpriteRenderer>().color = new Color32(0,102,255,255);
+        battery.GetComponent<SpriteRenderer>().color = new Color32(0, 102, 255, 255);
         battery.gameObject.tag = "Water";
 
-        cannon = allTiles[4, 2];
-        cannon.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
-        cannon.GetComponent<SpriteRenderer>().color = Color.gray;
-        cannon.gameObject.tag = "Hose";
+        hose = allTiles[3, 3];
+        hose.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
+        hose.GetComponent<SpriteRenderer>().color = Color.gray;
+        hose.gameObject.tag = "Hose";
 
-        var fire1 = allTiles[8, 3];
+        var fire1 = allTiles[9, 3];
         fire1.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
         fire1.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
         fire1.gameObject.tag = "Fire";
 
-        fire = allTiles[0, 7];
-        fire.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
-        fire.GetComponent<SpriteRenderer>().color = new Color32(153,0,0,255);
-        fire.gameObject.tag = "Fire";
+        //fire = allTiles[0, 7];
+        //fire.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        //fire.GetComponent<SpriteRenderer>().color = new Color32(153,0,0,255);
+        //fire.gameObject.tag = "Fire";
 
-        cannon = allTiles[2, 6];
-        cannon.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
-        cannon.GetComponent<SpriteRenderer>().color = Color.gray;
-        cannon.gameObject.tag = "Cannon";
+        //cannon = allTiles[2, 6];
+        //cannon.GetComponent<Tiles>().objectType = Tiles.ObejctType.End;
+        //cannon.GetComponent<SpriteRenderer>().color = Color.gray;
+        //cannon.gameObject.tag = "Cannon";
 
 
-        var rock = allTiles[8, 7];
-        rock.GetComponent<Tiles>().objectType = Tiles.ObejctType.Rock;
-        rock.GetComponent<SpriteRenderer>().color = new Color32(175,47,0,255);
-        rock.gameObject.tag = "Rock";
+        //var rock = allTiles[8, 7];
+        //rock.GetComponent<Tiles>().objectType = Tiles.ObejctType.Rock;
+        //rock.GetComponent<SpriteRenderer>().color = new Color32(175,47,0,255);
+        //rock.gameObject.tag = "Rock";
+
+
+        var block1 = allTiles[7, 7];
+        block1.GetComponent<Tiles>().objectType = Tiles.ObejctType.Block;
+        block1.GetComponent<SpriteRenderer>().color = Color.green;
+        block1.gameObject.tag = "Block";
+
+        var block2 = allTiles[7, 1];
+        block2.GetComponent<Tiles>().objectType = Tiles.ObejctType.Block;
+        block2.GetComponent<SpriteRenderer>().color = Color.green;
+        block2.gameObject.tag = "Block";
 
     }
 

@@ -14,6 +14,7 @@ TagManager:
   - Hose
   - Cannon
   - WaterShot
+  - Wall
   layers:
   - Default
   - TransparentFX

@@ -22,7 +22,6 @@ public class BlueCheck : MonoBehaviour
     public void BlueCheckStart(int col, int row, int typeValue, int oriC, int oriR)
     {
         ResetBlue();
-        Debug.Log("Start -> Check");
         BlueChecking(col, row, typeValue, oriC, oriR);
     }
 
@@ -124,8 +123,6 @@ public class BlueCheck : MonoBehaviour
     IEnumerator BlueChange(int col, int row, int typeValue, int oriC, int oriR) // 배터리 0 불 1 물 2 캐논 3 호스 4
     {
         yield return new WaitForSeconds(.1f);
-        Debug.Log("oriCR "+oriC + " , " + oriR);
-        Debug.Log("CR " + col + " , " + row);
         c = col;
         r = row;
 
@@ -184,6 +181,7 @@ public class BlueCheck : MonoBehaviour
 
         yield return new WaitForSeconds(.1f);
         lineChecker.FindObject();
+        typeActRe();
     }
 
     void TypeImage(int typeValue, Tiles to) 
@@ -206,7 +204,25 @@ public class BlueCheck : MonoBehaviour
             case 4: // 호스
                 obj.color = Color.gray;
                 break;
+            case 5: // 차단기
+                obj.color = Color.green;
+                break;
 
+        }
+    }
+
+    void typeActRe()
+    {
+        for (int i = 0; i < board.Width; i++)
+        {
+            for (int j = 0; j < board.Height; j++)
+            {
+                var a = board.allTiles[i, j].GetComponent<Tiles>();
+                if (a.objectType == Tiles.ObejctType.End)
+                {
+                    a.typeAct();
+                }
+            }
         }
     }
 
@@ -280,6 +296,7 @@ public class BlueCheck : MonoBehaviour
             }
         }
         waterClear();
+        typeActRe();
     }
     #region DIRECTION
     void BlueUp(int col, int row, int typeValue, int oriC, int oriR)
@@ -303,7 +320,6 @@ public class BlueCheck : MonoBehaviour
         {
             if (!a.isCanMove)
             {
-                Debug.Log("a");
                 blueList[bluecount] = a.gameObject;
                 bluecount++;
                 a.isCanMove = true;
