@@ -149,7 +149,7 @@ public class BlueCheck : MonoBehaviour
         to.isIndexLeft = from.isIndexLeft;
         to.isIndexRight = from.isIndexRight;
 
-        to.isConnect = true;
+        to.isConnect = from.isConnect;
         to.isCanMove = true;
         to.isMoved = true;
         TypeImage(typeValue, to);
@@ -260,7 +260,7 @@ public class BlueCheck : MonoBehaviour
                     a.isIndexRight = movedObject.isIndexRight;
                     a.isIndexLeft = movedObject.isIndexLeft;
 
-                    a.isConnect = true;
+                    a.isConnect = movedObject.isConnect;
                     a.isCanMove = true;
                     a.isMoved = false;
                     a.gameObject.GetComponent<SpriteRenderer>().color = movedObject.GetComponent<SpriteRenderer>().color;

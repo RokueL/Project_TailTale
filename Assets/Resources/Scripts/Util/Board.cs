@@ -35,6 +35,46 @@ public class Board : MonoBehaviour
         fire1.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
         fire1.gameObject.tag = "Fire";
 
+        var fire2 = allTiles[8, 3];
+        fire2.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire2.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
+        fire2.gameObject.tag = "Fire";
+
+        var fire3 = allTiles[9, 1];
+        fire3.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire3.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
+        fire3.gameObject.tag = "Fire";
+
+        var fire4 = allTiles[8, 1];
+        fire4.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire4.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
+        fire4.gameObject.tag = "Fire";
+
+        var fire5 = allTiles[9, 7];
+        fire5.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire5.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
+        fire5.gameObject.tag = "Fire";
+
+        var fire6 = allTiles[8, 7];
+        fire6.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire6.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
+        fire6.gameObject.tag = "Fire";
+
+        var door = allTiles[9, 6];
+        door.GetComponent<Tiles>().objectType = Tiles.ObejctType.Door;
+        door.GetComponent<SpriteRenderer>().color = new Color32(153, 102, 0, 255);
+        door.gameObject.tag = "Door";
+
+        var key = allTiles[9, 2];
+        key.GetComponent<Tiles>().objectType = Tiles.ObejctType.Key;
+        key.GetComponent<SpriteRenderer>().color = new Color32(255, 204, 0, 255);
+        key.gameObject.tag = "Key";
+
+        var fire7 = allTiles[8, 2];
+        fire7.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
+        fire7.GetComponent<SpriteRenderer>().color = new Color32(255, 102, 102, 255);
+        fire7.gameObject.tag = "Fire";
+
         //fire = allTiles[0, 7];
         //fire.GetComponent<Tiles>().objectType = Tiles.ObejctType.Object;
         //fire.GetComponent<SpriteRenderer>().color = new Color32(153,0,0,255);

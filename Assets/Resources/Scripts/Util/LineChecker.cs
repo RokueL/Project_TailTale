@@ -67,8 +67,12 @@ public class LineChecker : MonoBehaviour
                     }
                 }
 
+                if (a.objectType == Tiles.ObejctType.Key)
+                {
+                    redCheck.RedCheckStart(i, j, 3);
+                }
 
-                if(a.objectType == Tiles.ObejctType.End) // 캐논 3 호스 4
+                if (a.objectType == Tiles.ObejctType.End) // 캐논 3 호스 4
                 {
                     if (a.gameObject.tag == "Cannon")   // 회전 가능, 이동 가능
                     {

@@ -97,14 +97,12 @@ public class RedCheck : MonoBehaviour
 
     public void RedCheckStart(int col, int row, int typeValue) 
     {
-        //AllReset();
-        //ResetRed();
         RedChecking(col, row, typeValue);
     }
 
     void RedChecking(int col, int row, int typeValue ) // 내 타입 가져오는 거 (오브젝트에서 호출되는 거니깐 불인지 전기인지 등등
     {
-        if (row > 0 && row < board.Height-1) // 배터리 0 불 1 물 2
+        if (row > 0 && row < board.Height-1) // 배터리 0 불 1 물 2 열쇠 3
         {
             RedUp(col, row, typeValue);
             RedDown(col, row, typeValue);
@@ -150,7 +148,7 @@ public class RedCheck : MonoBehaviour
                 RedChecking(col, row + 1, typeValue);
             }
         }
-        else if(a.objectType == Tiles.ObejctType.End) // 배터리 0 불 1 물 2
+        else if(a.objectType == Tiles.ObejctType.End || a.objectType == Tiles.ObejctType.Door) // 배터리 0 불 1 물 2
         {
             isRedEnd = true;
             RedEndCheck(typeValue, a.gameObject);
@@ -169,7 +167,7 @@ public class RedCheck : MonoBehaviour
                 RedChecking(col, row - 1, typeValue);
             }
         }
-        else if (a.objectType == Tiles.ObejctType.End) // 배터리 0 불 1 물 2
+        else if (a.objectType == Tiles.ObejctType.End || a.objectType == Tiles.ObejctType.Door) // 배터리 0 불 1 물 2
         {
             isRedEnd = true;
             RedEndCheck(typeValue, a.gameObject);
@@ -189,7 +187,7 @@ public class RedCheck : MonoBehaviour
                 RedChecking(col + 1, row, typeValue);
             }
         }
-        else if (a.objectType == Tiles.ObejctType.End) // 배터리 0 불 1 물 2
+        else if (a.objectType == Tiles.ObejctType.End || a.objectType == Tiles.ObejctType.Door) // 배터리 0 불 1 물 2
         {
             isRedEnd = true;
             RedEndCheck(typeValue, a.gameObject);
@@ -208,7 +206,7 @@ public class RedCheck : MonoBehaviour
                 RedChecking(col - 1, row, typeValue);
             }
         }
-        else if (a.objectType == Tiles.ObejctType.End) // 배터리 0 불 1 물 2
+        else if (a.objectType == Tiles.ObejctType.End || a.objectType == Tiles.ObejctType.Door) // 배터리 0 불 1 물 2
         {
             isRedEnd = true;
             RedEndCheck(typeValue, a.gameObject);
@@ -239,6 +237,14 @@ public class RedCheck : MonoBehaviour
                 break;
             case 2: // 물 일때
                 if (obj.gameObject.tag == "Hose")
+                {
+                    isRedEnd = true;
+                    obj.isConnect = true;
+                    obj.typeAct();
+                }
+                break;
+            case 3: // 열쇠 일때
+                if (obj.gameObject.tag == "Door")
                 {
                     isRedEnd = true;
                     obj.isConnect = true;

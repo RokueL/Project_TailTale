@@ -1,3 +1,4 @@
+using Manager;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -17,7 +18,9 @@ public class Tiles : MonoBehaviour
         Wall,
         Yet,
         WaterShot,
-        Rock
+        Rock,
+        Key,
+        Door
     }
     public Sprite up;
     public Sprite down;
@@ -365,6 +368,14 @@ public class Tiles : MonoBehaviour
                     b.isYellow = false;
                     b.isConnect = false;
                 }
+                else if( b.objectType == ObejctType.None)
+                {
+
+                }
+                else
+                {
+                    break;
+                }
             }
 
         }
@@ -384,6 +395,14 @@ public class Tiles : MonoBehaviour
                     b.isYellow = false;
                     b.isConnect = false;
                 }
+                else if (b.objectType == ObejctType.None)
+                {
+
+                }
+                else
+                {
+                    break;
+                }
             }
 
         }
@@ -401,6 +420,14 @@ public class Tiles : MonoBehaviour
                     b.isBlue = false;
                     b.isYellow = false;
                     b.isConnect = false;
+                }
+                else if (b.objectType == ObejctType.None)
+                {
+
+                }
+                else
+                {
+                    break;
                 }
             }
         }
@@ -420,6 +447,14 @@ public class Tiles : MonoBehaviour
                     b.isBlue = false;
                     b.isYellow = false;
                     b.isConnect = false;
+                }
+                else if (b.objectType == ObejctType.None)
+                {
+
+                }
+                else
+                {
+                    break;
                 }
             }
 
@@ -475,6 +510,12 @@ public class Tiles : MonoBehaviour
                 }
                 break;
             case ObejctType.Wall:
+                break;
+            case ObejctType.Door: 
+                if(isConnect)
+                {
+                    UIManager.Instance.GameClearEvent();
+                }
                 break;
         }
     }
