@@ -162,7 +162,7 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 84
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -738,7 +738,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debris_Rock_2
+      name: Rock_01
       rect:
         serializedVersion: 2
         x: 1337
@@ -1087,7 +1087,6 @@ TextureImporter:
       Cage_0: 7482169890789098864
       Debris_Rock_0: -2172467669903683407
       Debris_Rock_1: -6574578536110265336
-      Debris_Rock_2: 8361687305777048821
       Debris_Rock_3: -3265841458835266263
       Debris_Rock_4: 4394767886012792526
       Debris_Rock_5: -4830065032845542301
@@ -1119,6 +1118,7 @@ TextureImporter:
       Plank small_Wood_1: -6018960712178358609
       Platform_Wood_0: -3309139463116521916
       Pulley_0: -2365473660537978582
+      Rock_01: 8361687305777048821
       Wood_Structure_0: -7250395611380032913
       Wood_Structure_1: 6335921083876662278
       Wood_Structure_2: -4603051262664808427
