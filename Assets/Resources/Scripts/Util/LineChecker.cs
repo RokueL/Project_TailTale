@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class LineChecker : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class LineChecker : MonoBehaviour
     Board board;
     PlayerController playerController;
 
+    SpriteAtlas spAt;
+
 
     bool isNotDisconnect;
 
@@ -20,6 +23,8 @@ public class LineChecker : MonoBehaviour
         redCheck = FindObjectOfType<RedCheck>();
         blueCheck = FindObjectOfType<BlueCheck>();
         yellowCheck = FindObjectOfType<YellowCheck>();
+
+        spAt = Resources.Load<SpriteAtlas>("Textures/spAtlas");
 
         board = FindObjectOfType<Board>();
         playerController = FindObjectOfType<PlayerController>();
@@ -195,7 +200,7 @@ public class LineChecker : MonoBehaviour
                     var a = board.allTiles[col, j].GetComponent<Tiles>();
                     a.objectType = Tiles.ObejctType.Wall;
                     a.gameObject.tag = "Wall";
-                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Wall");
                     a.isRed = false;
                     a.isBlue = false;
                     a.isYellow = false;
@@ -227,7 +232,7 @@ public class LineChecker : MonoBehaviour
                     var a = board.allTiles[col, j].GetComponent<Tiles>();
                     a.objectType = Tiles.ObejctType.Wall;
                     a.gameObject.tag = "Wall";
-                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Wall");
                     a.isRed = false;
                     a.isBlue = false;
                     a.isYellow = false;
@@ -259,7 +264,7 @@ public class LineChecker : MonoBehaviour
                     var a = board.allTiles[j, row].GetComponent<Tiles>();
                     a.objectType = Tiles.ObejctType.Wall;
                     a.gameObject.tag = "Wall";
-                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Wall");
                     a.isRed = false;
                     a.isBlue = false;
                     a.isYellow = false;
@@ -291,7 +296,7 @@ public class LineChecker : MonoBehaviour
                     var a = board.allTiles[j, row].GetComponent<Tiles>();
                     a.objectType = Tiles.ObejctType.Wall;
                     a.gameObject.tag = "Wall";
-                    a.gameObject.GetComponent<SpriteRenderer>().color = Color.black;
+                    a.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Wall");
                     a.isRed = false;
                     a.isBlue = false;
                     a.isYellow = false;

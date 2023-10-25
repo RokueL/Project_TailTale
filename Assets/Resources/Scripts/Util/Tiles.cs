@@ -5,6 +5,7 @@ using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.U2D;
 
 public class Tiles : MonoBehaviour
 {
@@ -22,10 +23,7 @@ public class Tiles : MonoBehaviour
         Key,
         Door
     }
-    public Sprite up;
-    public Sprite down;
-    public Sprite left;
-    public Sprite right;
+    public SpriteAtlas spAt;
 
     public ObejctType objectType;
 
@@ -56,14 +54,12 @@ public class Tiles : MonoBehaviour
     Board board;
     PlayerController playerController;
 
+
     public IObjectPool<GameObject> tilePool { get; set; }
     // Start is called before the first frame update
     void Start()
     {
-        up = Resources.Load<Sprite>("Textures/up");
-        down = Resources.Load<Sprite>("Textures/down");
-        left = Resources.Load<Sprite>("Textures/left");
-        right = Resources.Load<Sprite>("Textures/right");
+        spAt = Resources.Load<SpriteAtlas>("Textures/spAtlas");
 
 
         board = FindObjectOfType<Board>();
@@ -85,6 +81,43 @@ public class Tiles : MonoBehaviour
             }
         }
 
+    }
+
+    void TileTexutreSetUp()
+    {
+        var obj = gameObject.GetComponent<SpriteRenderer>().sprite;
+        switch (objectType)
+        {
+            case ObejctType.Rock:
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Rock_01");
+                break;
+            case ObejctType.Key:
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Key");
+                break;
+            case ObejctType.Door:
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Door");
+                break;
+            case ObejctType.Block:
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Block");
+                break;
+            case ObejctType.Object:
+                if (gameObject.tag == "Water")
+                {
+                    gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Water");
+                }
+                else if(gameObject.tag == "Fire")
+                {
+                    gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Fire");
+                }
+                else if(gameObject.tag == "Battery")
+                {
+                    gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Battery");
+                }
+                break;
+            case ObejctType.End:
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("ScreenDoor");
+                break;
+        }
     }
 
     void HoseShot()
@@ -524,22 +557,50 @@ public class Tiles : MonoBehaviour
     void Update()
     {
 
-
-        if(isUp)
+        TileTexutreSetUp();
+        if (isUp)
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = up;
+            if(gameObject.tag == "Hose")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Hose_Up");
+            }
+            else if(gameObject.tag == "Cannon")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Cannon_Up");
+            }
         }
         else if (isDown)
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = down;
+            if (gameObject.tag == "Hose")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Hose_Down");
+            }
+            else if (gameObject.tag == "Cannon")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Cannon_Down");
+            }
         }
         else if (isLeft)
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = left;
+            if (gameObject.tag == "Hose")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Hose_Left");
+            }
+            else if (gameObject.tag == "Cannon")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Cannon_Left");
+            }
         }
         else if (isRight)
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = right;
+            if (gameObject.tag == "Hose")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Hose_Right");
+            }
+            else if (gameObject.tag == "Cannon")
+            {
+                gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("Cannon_Right");
+            }
         }
         else
         {

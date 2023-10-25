@@ -360,7 +360,7 @@ public class BlueCheck : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        def = Resources.Load<Sprite>("Textures/TableTile");
+        def = Resources.Load<Sprite>("Textures/ETC/TableTile");
         board = FindObjectOfType<Board>();
         redCheck = FindObjectOfType<RedCheck>();
         lineChecker = FindObjectOfType<LineChecker>();

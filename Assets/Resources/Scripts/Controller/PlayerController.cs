@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public int column;
     public int row;
 
+    int resetTimes;
     int maxRed = 25;
     int maxBlue = 5;
     int maxYellow = 5;
@@ -168,6 +170,13 @@ public class PlayerController : MonoBehaviour
                         row++;
                     }
                 }
+                else if( a == Tiles.ObejctType.End) 
+                {
+                    if(board.allTiles[column, row + 1].gameObject.tag == "OpenScreen")
+                    {
+                        row++;
+                    }
+                }
                 if (isSpacePress)
                 {
                     switch (tailvalue)
@@ -211,6 +220,13 @@ public class PlayerController : MonoBehaviour
                     if (board.allTiles[column, row - 1].gameObject.tag == "Water")
                     {
                         row--;
+                    }
+                }
+                else if (a == Tiles.ObejctType.End)
+                {
+                    if (board.allTiles[column, row + 1].gameObject.tag == "OpenScreen")
+                    {
+                        row++;
                     }
                 }
                 if (isSpacePress)
@@ -258,6 +274,13 @@ public class PlayerController : MonoBehaviour
                         column++;
                     }
                 }
+                else if (a == Tiles.ObejctType.End)
+                {
+                    if (board.allTiles[column, row + 1].gameObject.tag == "OpenScreen")
+                    {
+                        row++;
+                    }
+                }
                 if (isSpacePress)
                 {
                     switch (tailvalue)
@@ -303,6 +326,13 @@ public class PlayerController : MonoBehaviour
                         column--;
                     }
                 }
+                else if (a == Tiles.ObejctType.End)
+                {
+                    if (board.allTiles[column, row + 1].gameObject.tag == "OpenScreen")
+                    {
+                        row++;
+                    }
+                }
                 if (isSpacePress)
                 {
                     switch (tailvalue)
@@ -333,6 +363,19 @@ public class PlayerController : MonoBehaviour
             }
             
         }
+        if (Input.GetKey(KeyCode.R))
+        {
+            StartCoroutine(resetGame());
+            if(resetTimes> 1)
+            {
+                resetTimes = 0;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            resetTimes = 0;
+        }
         //색 변경
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -348,6 +391,11 @@ public class PlayerController : MonoBehaviour
         // 페인트 칠
     }
 
+    IEnumerator resetGame()
+    {
+        yield return new WaitForSeconds(1f);
+        resetTimes++;
+    }
 
 
     #region UNITYDEFAULT

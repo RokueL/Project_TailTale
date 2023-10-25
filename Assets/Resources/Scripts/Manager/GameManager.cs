@@ -35,7 +35,7 @@ namespace Manager
                 }
 
                 // 마음대로 추가하고 삭제할 수 없도록 함.
-                DontDestroyOnLoad(go);
+                //DontDestroyOnLoad(go);
                 s_instance = go.GetComponent<GameManager>();
             }
         }
