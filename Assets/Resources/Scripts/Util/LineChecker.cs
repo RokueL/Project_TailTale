@@ -135,6 +135,7 @@ public class LineChecker : MonoBehaviour
                 {
                     a.gameObject.tag = "Untagged";
                     a.objectType = Tiles.ObejctType.None;
+                    a.gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Textures/ETC/TableTile");
                     a.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                 }
             }

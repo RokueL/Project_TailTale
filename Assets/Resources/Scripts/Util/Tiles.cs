@@ -148,6 +148,7 @@ public class Tiles : MonoBehaviour
                             }
                             b.objectType = ObejctType.WaterShot;
                             b.gameObject.tag = "WaterShot";
+                            b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
@@ -186,6 +187,7 @@ public class Tiles : MonoBehaviour
                             }
                             b.objectType = ObejctType.WaterShot;
                             b.gameObject.tag = "WaterShot";
+                            b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
@@ -224,6 +226,7 @@ public class Tiles : MonoBehaviour
                             }
                             b.objectType = ObejctType.WaterShot;
                             b.gameObject.tag = "WaterShot";
+                            b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
@@ -262,6 +265,7 @@ public class Tiles : MonoBehaviour
                             }
                             b.objectType = ObejctType.WaterShot;
                             b.gameObject.tag = "WaterShot";
+                            b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                             b.gameObject.GetComponent<SpriteRenderer>().color = new Color(0, 255, 255);
                             b.isRed = false;
                             b.isBlue = false;
@@ -298,6 +302,7 @@ public class Tiles : MonoBehaviour
                             }
                             else
                             {
+                                b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                                 b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                             }
                         }
@@ -323,6 +328,7 @@ public class Tiles : MonoBehaviour
                             }
                             else
                             {
+                                b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                                 b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                             }
                         }
@@ -348,6 +354,7 @@ public class Tiles : MonoBehaviour
                             }
                             else
                             {
+                                b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                                 b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                             }
                         }
@@ -373,6 +380,7 @@ public class Tiles : MonoBehaviour
                             }
                             else
                             {
+                                b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                                 b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                             }
                         }
@@ -395,6 +403,7 @@ public class Tiles : MonoBehaviour
                 {
                     b.objectType = ObejctType.None;
                     b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                     b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                     b.isRed = false;
                     b.isBlue = false;
@@ -422,6 +431,7 @@ public class Tiles : MonoBehaviour
                 {
                     b.objectType = ObejctType.None;
                     b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                     b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                     b.isRed = false;
                     b.isBlue = false;
@@ -448,6 +458,7 @@ public class Tiles : MonoBehaviour
                 {
                     b.objectType = ObejctType.None;
                     b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                     b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                     b.isRed = false;
                     b.isBlue = false;
@@ -475,6 +486,7 @@ public class Tiles : MonoBehaviour
                     Debug.Log("µ¹ ºÎ¼û");
                     b.objectType = ObejctType.None;
                     b.gameObject.tag = "Untagged";
+                    b.gameObject.GetComponent<SpriteRenderer>().sprite = spAt.GetSprite("TableTile");
                     b.gameObject.GetComponent<SpriteRenderer>().color = Color.white;
                     b.isRed = false;
                     b.isBlue = false;

@@ -412,6 +412,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        StopAllCoroutines();
         targetX = (int)transform.position.x;
         targetY = (int)transform.position.y;
         board = FindObjectOfType<Board>();
